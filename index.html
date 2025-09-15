@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Oráculos de The Magician</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+<body>
+  <!-- galáxia animada (UM ÚNICO PAR de canvas) -->
+  <canvas id="bg-nebula" aria-hidden="true"></canvas>
+  <canvas id="bg-stars" aria-hidden="true"></canvas>
+
+  <!-- topo -->
+  <div class="header">
+    <div class="row">
+      <div class="sigil" aria-hidden="true"></div>
+      <a href="#inicio" class="brand">
+        <div class="name">Oráculos de The Magician</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- faixa roxa -->
+  <div class="ribbon">
+    <div class="page">
+      <!-- HERO -->
+      <section id="inicio" class="hero">
+        <h1 class="h1">Oráculos, Feitiços & Ritualística para guiar sua jornada</h1>
+        <p class="sub">Tarô, runas e rituais coletivos — com sensibilidade, ética e beleza.</p>
+        <div class="chips">
+          <a href="#consultas" class="chip">🃏 Consultas</a>
+          <a href="#feiticos" class="chip">✨ Feitiços</a>
+          <a href="#promocoes" class="chip">🎁 Promoção</a>
+        </div>
+
+        <!-- SOBRE MIM (placeholder visual, como estava) -->
+        <!-- SOBRE MIM -->
+        <section class="section about">
+          <h2>🌙 Sobre Mim</h2>
+          <div class="about-grid card">
+            <div class="about-text">
+              <p class="muted">
+              </p>
+              <ul class="about-list">
+
+              </ul>
+            </div>
+
+
+          </div>
+        </section>
+
+      </section>
+
+      <!-- CONSULTAS -->
+      <section id="consultas" class="section">
+        <h2>Consultas & Oráculos</h2>
+        <div class="carousel">
+          <button class="arrow left" data-to="#c1">‹</button>
+          <div class="rail" id="c1">
+            <article class="card card-slide">
+              <span class="badge">Pergunta</span>
+              <h3 style="margin:8px 0 4px">1 Pergunta</h3>
+              <p class="muted">Resposta objetiva para uma questão direta.</p>
+              <div class="price">R$ 12</div>
+              <div class="divider"></div>
+              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
+            </article>
+            <article class="card card-slide">
+              <span class="badge">Perguntas</span>
+              <h3 style="margin:8px 0 4px">3 Perguntas</h3>
+              <p class="muted">Três focos centrais com conselho.</p>
+              <div class="price">R$ 69</div>
+              <div class="divider"></div>
+              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
+            </article>
+            <article class="card card-slide">
+              <span class="badge">Perguntas</span>
+              <h3 style="margin:8px 0 4px">6 Perguntas</h3>
+              <p class="muted">Leitura completa de temas variados.</p>
+              <div class="price">R$ 109</div>
+              <div class="divider"></div>
+              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
+            </article>
+            <article class="card card-slide">
+              <span class="badge">Mesa</span>
+              <h3 style="margin:8px 0 4px">Mesa Aberta</h3>
+              <p class="muted">Exploração livre: áreas, ciclos e bloqueios.</p>
+              <div class="price">R$ 149</div>
+              <div class="divider"></div>
+              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
+            </article>
+          </div>
+          <button class="arrow right" data-to="#c1">›</button>
+        </div>
+      </section>
+
+      <!-- FEITIÇOS -->
+      <section id="feiticos" class="section">
+        <h2>Feitiços & Ritualística</h2>
+        <div class="carousel">
+          <button class="arrow left" data-to="#c2">‹</button>
+          <div class="rail" id="c2">
+            <article class="card card-slide">
+              <span class="badge">Cura</span>
+              <h3 style="margin:8px 0 4px">Equilíbrio & Limpeza</h3>
+              <p class="muted">Higienização energética, serenidade e foco.</p>
+              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
+            </article>
+            <article class="card card-slide">
+              <span class="badge">Prosperidade</span>
+              <h3 style="margin:8px 0 4px">Abertura de Caminhos</h3>
+              <p class="muted">Fartura, oportunidades e segurança material.</p>
+              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
+            </article>
+            <article class="card card-slide">
+              <span class="badge">Banimento</span>
+              <h3 style="margin:8px 0 4px">Cortes & Proteção</h3>
+              <p class="muted">Quebra de laços nocivos e blindagem.</p>
+              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
+            </article>
+          </div>
+          <button class="arrow right" data-to="#c2">›</button>
+        </div>
+        <div class="space"></div>
+      </section>
+
+      <!-- AGENDA -->
+      <section id="agenda" class="section">
+        <h2>Agenda Coletiva</h2>
+        <div class="card">
+          <div style="display:flex; gap:22px; flex-wrap:wrap; justify-content:center; text-align:center">
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:28px" id="d">--</div>
+              <div class="muted">dias</div>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:28px" id="h">--</div>
+              <div class="muted">horas</div>
+            </div>
+            <div>
+              <div style="font-family:'Playfair Display',serif;font-weight:800;font-size:28px" id="m">--</div>
+              <div class="muted">min</div>
+            </div>
+          </div>
+          <div class="space"></div>
+          <div style="display:flex; justify-content:center">
+            <a class="btn" href="#contato">Reservar sua vaga <span class="spark"></span></a>
+          </div>
+          <p class="muted" style="margin:10px 0 0; text-align:center">Próxima data: <span id="ritualDate"
+              style="color:var(--gold-300)"></span></p>
+        </div>
+      </section>
+
+      <!-- PROMO -->
+      <section id="promocoes" class="section">
+        <h2>Promoções & Cupons</h2>
+        <div class="promo">
+          <h3 style="margin:4px 0 6px">🌹 Mês da Rosa Dourada</h3>
+          <p style="margin:0 0 10px">Tiragem 3 Perguntas com 15% OFF</p>
+          <form onsubmit="event.preventDefault(); ativarCupom();">
+            <div class="grid">
+              <input id="cupom" placeholder="Digite seu cupom mágico (ex.: ROSADOURADA)" aria-label="Cupom" />
+              <button class="btn" type="submit">Ativar <span class="spark"></span></button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- DEPOIMENTOS -->
+      <!-- DEPOIMENTOS -->
+      <section id="depoimentos" class="section">
+        <h2>Depoimentos</h2>
+        <div class="carousel">
+          <button class="arrow left" data-to="#c3" aria-label="Anterior">‹</button>
+
+          <div class="rail" id="c3">
+            <figure class="testi-card card">
+              <div class="testi-frame">
+                <img class="testi-img" src="IMAGENS/depo1.jpg" alt="Depoimento via WhatsApp 1">
+              </div>
+            </figure>
+
+            <figure class="testi-card card">
+              <div class="testi-frame">
+                <img class="testi-img" src="./img/Captura de tela 2025-09-11 084031.png"
+                  alt="Depoimento via WhatsApp 2">
+              </div>
+            </figure>
+
+            <figure class="testi-card card">
+              <div class="testi-frame">
+                <img class="testi-img" src="IMAGENS/depo3.jpg" alt="Depoimento via WhatsApp 3">
+              </div>
+            </figure>
+          </div>
+
+          <button class="arrow right" data-to="#c3" aria-label="Próximo">›</button>
+        </div>
+      </section>
+
+
+      <!-- CONTATO -->
+      <section id="contato" class="section">
+        <h2>Contato</h2>
+        <p class="muted" style="margin:0 0 8px">Preencha o formulário ou fale direto no WhatsApp.</p>
+        <div class="card" style="margin-bottom:12px">
+          <form onsubmit="enviarWhatsapp(event)">
+            <div style="display:grid; gap:10px; grid-template-columns:1fr 1fr">
+              <input id="nome" required placeholder="Seu nome" />
+              <select id="assunto" required>
+                <option value="" selected disabled>Assunto</option>
+                <!-- Consultas -->
+                <option value="pergunta1">1 Pergunta</option>
+                <option value="perguntas3">3 Perguntas</option>
+                <option value="perguntas6">6 Perguntas</option>
+                <option value="mesa">Mesa Aberta</option>
+                <!-- Feitiços / Ritualística -->
+                <option value="limpeza">Equilíbrio & Limpeza</option>
+                <option value="prosperidade">Abertura de Caminhos</option>
+                <option value="banimento">Cortes & Proteção</option>
+                <!-- Genérico -->
+                <option value="duvida">Dúvida geral</option>
+              </select>
+            </div>
+
+            <div class="space"></div>
+            <textarea required placeholder="Sua mensagem"></textarea>
+            <div class="space"></div>
+            <button class="btn" type="submit">Enviar <span class="spark"></span></button>
+
+          </form>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px; color:var(--gold-300)">Redes & WhatsApp</h3>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <a class="btn" style="background:linear-gradient(180deg,#aef7a6,#5df072)"
+              href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço.">💬 WhatsApp
+              <span class="spark"></span></a>
+            <a class="btn" href="https://www.instagram.com/le._bateleur?igsh=MnVjbG05cDM0Y29h" target="_blank">
+              📸 Instagram <span class="spark"></span>
+            </a>
+
+          </div>
+          <p class="muted" style="margin-top:8px">Botão verde flutuante sempre visível no canto.</p>
+        </div>
+      </section>
+
+      <!-- RODAPÉ -->
+      <div class="footer">
+        <p class="scripted">A magia acontece quando você acredita.</p>
+        <p class="muted">© <span id="year"></span> Oráculos de The Magician. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- botão flutuante whatsapp -->
+  <a title="WhatsApp" href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço."
+    style="position:fixed; left:16px; bottom:calc(var(--tabbar-h) + 18px); width:56px; height:56px; border-radius:50%; display:grid; place-items:center; z-index:65; text-decoration:none; background:linear-gradient(180deg,#aef7a6,#5df072); color:#0b1b0f; font-weight:900; box-shadow:0 10px 18px rgba(20,255,88,.2)">💬</a>
+
+  <Script>
+    // ====== GALÁXIA ANIMADA ======
+    const cnvN = document.getElementById('bg-nebula');
+    const cnvS = document.getElementById('bg-stars');
+    const nctx = cnvN.getContext('2d');
+    const sctx = cnvS.getContext('2d');
+
+    let W = 0, H = 0;
+    function resize() {
+      W = cnvN.width = cnvS.width = innerWidth;
+      H = cnvN.height = cnvS.height = innerHeight;
+    }
+    resize(); addEventListener('resize', resize);
+
+    const blobs = Array.from({ length: 6 }, (_, i) => ({
+      x: Math.random() * 1.2 - 0.1,
+      y: Math.random() * 1.2 - 0.1,
+      r: (i < 2 ? 0.9 : (i < 4 ? 0.7 : 0.55)),
+      c: ['#2a1546', '#3b1d6a', '#6d2e8f', '#a03abf', '#d768ff'][i % 5],
+      a: Math.random() * Math.PI * 2,
+      v: (Math.random() * 0.4 + 0.1) * (Math.random() < .5 ? -1 : 1)
+    }));
+
+    function drawNebula(t = 0) {
+      nctx.clearRect(0, 0, W, H);
+      const g = nctx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .1, W * .5, H * .5, Math.max(W, H) * .8);
+      g.addColorStop(0, '#12152a'); g.addColorStop(1, '#0b0713');
+      nctx.fillStyle = g; nctx.fillRect(0, 0, W, H);
+
+      blobs.forEach((b, idx) => {
+        const px = (b.x + Math.sin(t * 0.00008 + idx) * 0.015) * W;
+        const py = (b.y + Math.cos(t * 0.00006 + idx) * 0.02) * H;
+        const R = Math.max(W, H) * b.r;
+        const grad = nctx.createRadialGradient(px, py, 0, px, py, R);
+        grad.addColorStop(0, b.c + 'ee');
+        grad.addColorStop(0.35, b.c + '55');
+        grad.addColorStop(1, 'transparent');
+        nctx.globalCompositeOperation = 'lighter';
+        nctx.fillStyle = grad; nctx.beginPath(); nctx.arc(px, py, R, 0, Math.PI * 2); nctx.fill();
+        nctx.globalCompositeOperation = 'source-over';
+      });
+    }
+
+    let S = []; const COUNT = innerWidth < 360 ? 45 : (innerWidth < 480 ? 70 : (innerWidth < 768 ? 100 : 160));
+    function makeStars() { S = Array.from({ length: COUNT }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .3, a: Math.random(), v: Math.random() * .35 + .05 })) }
+    makeStars();
+    let mx = W / 2, my = H / 2;
+    addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY });
+    addEventListener('touchmove', e => { if (e.touches?.[0]) { mx = e.touches[0].clientX; my = e.touches[0].clientY } });
+
+    function drawStars() {
+      sctx.clearRect(0, 0, W, H);
+      for (const s of S) {
+        s.a += s.v * .02; const tw = (1 + Math.sin(s.a)) * .5;
+        const px = s.x + (mx - W / 2) * .006 * s.r; const py = s.y + (my - H / 2) * .006 * s.r;
+        sctx.beginPath(); sctx.arc(px, py, s.r, 0, Math.PI * 2);
+        sctx.fillStyle = `rgba(255,255,255,${.35 + tw * .55})`; sctx.fill();
+      }
+    }
+
+    function loop(t) { drawNebula(t); drawStars(); requestAnimationFrame(loop) }
+    requestAnimationFrame(loop);
+
+    // ano no rodapé
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ====== CONTATO -> WhatsApp com mensagem pronta (com validação p/ Dúvida Geral) ======
+    function enviarWhatsapp(e) {
+      e.preventDefault();
+
+      const PHONE = "5579998234443"; // seu número
+      const nome = (document.getElementById('nome')?.value || '').trim();
+      const assuntoSel = document.getElementById('assunto');
+      const assunto = assuntoSel?.value || '';
+      const textarea = document.querySelector('#contato textarea');
+      const textoLivre = (textarea?.value || '').trim();
+
+      // Se assunto = "duvida", obrigar a preencher "Sua mensagem"
+      if (assunto === 'duvida' && !textoLivre) {
+        // Ajusta UX (placeholder + foco) sem alterar o layout
+        if (textarea) {
+          textarea.placeholder = 'Descreva sua dúvida geral aqui...';
+          textarea.required = true;
+          textarea.focus();
+        }
+        alert('Por favor, descreva sua dúvida no campo "Sua mensagem".');
+        return;
+      }
+
+      // Mensagens por assunto
+      const msgs = {
+        pergunta1: "Quero agendar 1 Pergunta (resposta objetiva).",
+        perguntas3: "Quero agendar 3 Perguntas (três focos com conselho).",
+        perguntas6: "Quero agendar 6 Perguntas (leitura completa).",
+        mesa: "Quero agendar uma Mesa Aberta (exploração livre).",
+        limpeza: "Gostaria do ritual Equilíbrio & Limpeza.",
+        prosperidade: "Gostaria do ritual Abertura de Caminhos (prosperidade).",
+        banimento: "Preciso do ritual Cortes & Proteção (banimento).",
+        duvida: "Tenho uma dúvida geral e gostaria de orientação."
+      };
+
+      const assuntoTxt = msgs[assunto] || "Tenho interesse e gostaria de mais informações.";
+      const saudacao = nome ? `Olá! Sou ${nome}. ` : "Olá! ";
+      const extra = textoLivre ? `\n\nDetalhes: ${textoLivre}` : "";
+
+      const msg = `${saudacao}${assuntoTxt}${extra}\n\n(Enviado pelo site)`;
+      const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+
+      window.open(url, '_blank');
+    }
+
+    /* / Ajuste dinâmico do placeholder/required conforme o assunto */
+    (function () {
+      const assuntoSel = document.getElementById('assunto');
+      const textarea = document.querySelector('#contato textarea');
+      if (!assuntoSel || !textarea) return;
+
+      function syncMensagemRequisito() {
+        if (assuntoSel.value === 'duvida') {
+          textarea.required = true;
+          if (!textarea.value.trim()) {
+            textarea.placeholder = 'Descreva sua dúvida geral aqui...';
+          }
+        } else {
+          // volta ao comportamento padrão do seu site (mensagem opcional)
+          textarea.required = false;
+          // mantenho seu placeholder atual; não altero se já tiver texto
+        }
+      }
+
+      assuntoSel.addEventListener('change', syncMensagemRequisito);
+      // aplica uma vez ao carregar
+      syncMensagemRequisito();
+    })();
+
+    // ===== Carrosséis: setas movem o trilho =====
+    document.querySelectorAll('.arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sel = btn.getAttribute('data-to');
+        const rail = document.querySelector(sel);
+        if (!rail) return;
+        const dir = btn.classList.contains('left') ? -1 : 1;
+        rail.scrollBy({ left: dir * (rail.clientWidth * 0.8), behavior: 'smooth' });
+      });
+    });
+
+
+    // === Atalho secreto para abrir o admin ===
+    // 1 Tocar/clicar no logo 5x em até 3s
+    // 2  Desktop: Shift + Alt + A
+
+    (function () {
+      const TARGET = document.querySelector('.name, .brand, .sigil') || document.body;
+      let taps = 0, timer = null;
+
+      function openAdmin() { location.href = 'admin.html'; } // ajuste o caminho se necessário
+
+      function registerTap() {
+        taps++;
+        if (taps >= 5) { openAdmin(); return; }
+        clearTimeout(timer);
+        timer = setTimeout(() => { taps = 0; }, 3000);
+      }
+
+      TARGET.addEventListener('click', registerTap, { passive: true });
+      TARGET.addEventListener('touchend', registerTap, { passive: true });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.shiftKey && e.altKey && (e.key === 'A' || e.key === 'a')) openAdmin();
+      });
+    })();
+
+
+    (function () {
+      const raw = localStorage.getItem('tm_data');
+      if (!raw) return; // nada salvo ainda
+      let data = {};
+      try { data = JSON.parse(raw) || {}; } catch (e) { }
+
+      /* — Sobre mim — */
+      if (data.about) {
+        const aboutP = document.querySelector('.about .about-text .muted');
+        if (aboutP) aboutP.innerHTML = data.about.replace(/\n/g, '<br>');
+      }
+
+      /* helpers de criação */
+      const el = (tag, attrs = {}, html = "") => {
+        const n = document.createElement(tag);
+        for (const k in attrs) n.setAttribute(k, attrs[k]);
+        if (html) n.innerHTML = html;
+        return n;
+      };
+
+      /* — Consultas (#c1) — */
+      if (Array.isArray(data.consultas) && data.consultas.length) {
+        const rail = document.querySelector('#c1');
+        if (rail) {
+          rail.innerHTML = "";
+          data.consultas.forEach(item => {
+            const card = el('article', { class: 'card card-slide' });
+            if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
+            if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
+            if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
+            if (item.preco) card.appendChild(el('div', { class: 'price' }, item.preco));
+            card.appendChild(el('div', { class: 'divider' }));
+            card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Agendar <span class="spark"></span>'));
+            rail.appendChild(card);
+          });
+        }
+      }
+
+      /* — Feitiços (#c2) — */
+      if (Array.isArray(data.feiticos) && data.feiticos.length) {
+        const rail = document.querySelector('#c2');
+        if (rail) {
+          rail.innerHTML = "";
+          data.feiticos.forEach(item => {
+            const card = el('article', { class: 'card card-slide' });
+            if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
+            if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
+            if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
+            card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Solicitar <span class="spark"></span>'));
+            rail.appendChild(card);
+          });
+        }
+      }
+
+      /* — Depoimentos por foto (#c3) — */
+      if (Array.isArray(data.depoimentos) && data.depoimentos.length) {
+        const rail = document.querySelector('#c3');
+        if (rail) {
+          rail.innerHTML = "";
+          data.depoimentos.forEach(item => {
+            if (!item.img) return;
+            const fig = el('figure', { class: 'testi-card card' });
+            const frame = el('div', { class: 'testi-frame' });
+            const img = el('img', { class: 'testi-img', src: item.img, alt: 'Depoimento' });
+            frame.appendChild(img);
+            fig.appendChild(frame);
+            rail.appendChild(fig);
+          });
+        }
+      }
+
+       (function () {
+    const raw = localStorage.getItem('tm_data');
+    if (!raw) return;
+    let data = {};
+    try { data = JSON.parse(raw) || {}; } catch (e) {}
+
+    // ... (sobre, consultas, feitiços, depoimentos)
+
+    /* — Agenda (pega a próxima data futura) — */
+    if (Array.isArray(data.agenda) && data.agenda.length) {
+      const now = new Date();
+
+      const futuras = (data.agenda || [])
+        .map(x => (typeof x === 'string' ? { date: x, obs: '' } : x))
+        .map(x => ({ d: new Date(x.date), obs: x.obs || '' }))
+        .filter(o => !isNaN(o.d) && o.d >= now)
+        .sort((a, b) => a.d - b.d);
+
+      if (futuras[0]) {
+        const d = futuras[0].d;
+        const obs = futuras[0].obs;
+
+        const elDate = document.getElementById('ritualDate');
+        if (elDate) {
+          let fmt = d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+          if (obs) fmt += ` — ${obs}`;
+          elDate.textContent = fmt;
+        }
+
+        // contador
+        const nd = d.getTime();
+        const elD = document.getElementById('d'), elH = document.getElementById('h'), elM = document.getElementById('m');
+        if (elD && elH && elM) {
+          function tick() {
+            const t = nd - Date.now();
+            if (t <= 0) return;
+            elD.textContent = Math.floor(t / 86400000);
+            elH.textContent = Math.floor((t % 86400000) / 3600000);
+            elM.textContent = Math.floor((t % 3600000) / 60000);
+            requestAnimationFrame(tick);
+          }
+          tick();
+        }
+      }
+    }
+
+    // ... (cupons, storage listener)
+  })();
+
+      /* — Cupons (integra com o botão “Ativar”) — */
+      /* — Cupons (integra com o botão “Ativar”) — */
+      window.ativarCupom = function () {
+        const inp = document.getElementById('cupom');
+        const val = (inp?.value || '').trim().toUpperCase();
+        if (!val) { alert('Digite um cupom.'); return; }
+
+        const ok = (data.cupons || []).find(c => (c.codigo || '').toUpperCase() === val);
+        if (ok) {
+          // guarda para referência futura (se quiser usar no form depois)
+          localStorage.setItem('tm_cupom_aplicado', val);
+
+          // abre o WhatsApp já com a mensagem do cupom
+          const desc = ok.desconto ? ` (${ok.desconto})` : '';
+          const msg = `Olá! Quero usar o cupom ${ok.codigo}${desc} nas minhas consultas/rituais.`;
+          const url = `https://wa.me/5579998234443?text=${encodeURIComponent(msg)}`;
+          window.open(url, '_blank');
+
+        } else {
+          alert('Cupom inválido ou expirado.');
+        }
+      };
+
+
+      /* — Atualização “ao vivo” quando admin salvar em outra aba — */
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'tm_data' || e.key === 'tm_ping') {
+          location.reload();
+        }
+      });
+
+    })();
+
+  </Script>
+
+
+
+
+</body>
+
+</html>
