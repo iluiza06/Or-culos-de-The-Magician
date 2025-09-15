@@ -591,10 +591,18 @@
     })();
 
   </Script>
-
-
-
-
 </body>
+
+<script>
+  // senha provisória para acessar o site público
+  const senhaCorreta = "magia2025";
+
+  const tentativa = prompt("Digite a senha para acessar o site:");
+
+  if (tentativa !== senhaCorreta) {
+    document.body.innerHTML = "<h1 style='text-align:center; color:#d4af37; margin-top:40px;'>❌ Acesso negado</h1>";
+    throw new Error("Acesso negado");
+  }
+</script>
 
 </html>
