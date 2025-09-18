@@ -4,16 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin • Oráculos de The Magician</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-
   <div id="app" class="center">
-    <!-- Tela de Login -->
+    <!-- Login -->
     <div class="card login" id="login-card">
       <div class="topbar">
-        <!-- trocado: site.html -> index.html -->
         <a class="brand" id="brandHomeDash" href="index.html">
           <div class="sig"></div>
           <div class="name">Oráculos de The Magician</div>
@@ -36,7 +35,6 @@
     <!-- Dashboard -->
     <div class="wrap" id="dash" style="display:none">
       <div class="topbar">
-        <!-- trocado: ../img/site.html -> index.html -->
         <a class="brand" href="index.html">
           <div class="sig"></div>
           <div class="name">Oráculos de The Magician</div>
@@ -99,7 +97,7 @@
       <!-- Depoimentos -->
       <section class="section" id="depo">
         <div class="card">
-          <h2>Depoimentos por imagem (URL)</h2>
+          <h2>Depoimentos por imagem</h2>
           <div id="listaDepo" class="grid grid-3"></div>
           <div class="divider" style="height:10px"></div>
           <div class="grid grid-2">
@@ -139,77 +137,52 @@
           <div style="margin-top:10px"><button class="btn" id="addCupom">Criar/atualizar cupom</button></div>
         </div>
       </section>
-
     </div>
   </div>
 
+  <!-- ===== LÓGICA DO ADMIN ===== -->
   <script>
-    /* ====== CONFIG LOGIN (troque aqui) ====== */
+    /* ====== CONFIG LOGIN ====== */
     const USER = "admin";
     const PASS = "magi@2025";
-
-    /* ====== RATE-LIMIT simples ====== */
     const MAX_TRY = 5;
     const LOCK_MIN = 5;
 
-    function setLock() {
-      const until = Date.now() + LOCK_MIN * 60 * 1000;
-      localStorage.setItem("adm_lock_until", until);
-    }
+    function setLock() { localStorage.setItem("adm_lock_until", Date.now() + LOCK_MIN * 60 * 1000); }
     function isLocked() {
       const until = parseInt(localStorage.getItem("adm_lock_until") || "0", 10);
       if (!until) return false;
       if (Date.now() >= until) { localStorage.removeItem("adm_lock_until"); return false; }
       return true;
     }
-    function tries(n) {
-      if (n !== undefined) localStorage.setItem("adm_tries", String(n));
-      return parseInt(localStorage.getItem("adm_tries") || "0", 10);
-    }
+    function tries(n) { if (n !== undefined) localStorage.setItem("adm_tries", String(n)); return parseInt(localStorage.getItem("adm_tries") || "0", 10); }
+    function setSession(on){ on ? localStorage.setItem("adm_session","1") : localStorage.removeItem("adm_session"); }
+    function hasSession(){ return localStorage.getItem("adm_session")==="1"; }
 
-    /* ====== Sessão ====== */
-    function setSession(on) { if (on) { localStorage.setItem("adm_session", "1"); } else { localStorage.removeItem("adm_session"); } }
-    function hasSession() { return localStorage.getItem("adm_session") === "1"; }
-
-    /* ====== UI refs ====== */
     const loginCard = document.getElementById('login-card');
     const dash = document.getElementById('dash');
     const msg = document.getElementById('msg');
     const lockInfo = document.getElementById('lockInfo');
+    function showDash(){ document.getElementById('app').classList.remove('center'); loginCard.style.display='none'; dash.style.display='block'; }
+    function showLogin(){ document.getElementById('app').classList.add('center'); dash.style.display='none'; loginCard.style.display='block'; }
+    function updateLockUI(){ lockInfo.style.display = isLocked() ? 'inline-flex' : 'none'; }
 
-    function showDash() { document.getElementById('app').classList.remove('center'); loginCard.style.display = 'none'; dash.style.display = 'block'; }
-    function showLogin() { document.getElementById('app').classList.add('center'); dash.style.display = 'none'; loginCard.style.display = 'block'; }
-
-    /* ====== Boot ====== */
     if (hasSession()) { showDash(); } else { showLogin(); updateLockUI(); }
 
-    /* ====== Login ====== */
     document.getElementById('btnLogin').addEventListener('click', doLogin);
     document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
-    function updateLockUI() {
-      const locked = isLocked();
-      lockInfo.style.display = locked ? 'inline-flex' : 'none';
-    }
-
-    function doLogin() {
+    function doLogin(){
       if (isLocked()) { msg.textContent = "Muitas tentativas. Tente novamente em alguns minutos."; updateLockUI(); return; }
       const u = (document.getElementById('user').value || '').trim();
       const p = document.getElementById('pass').value || '';
-      if (u === USER && p === PASS) {
-        setSession(true); tries(0); msg.textContent = ''; showDash(); return;
-      }
+      if (u === USER && p === PASS) { setSession(true); tries(0); msg.textContent=''; showDash(); return; }
       const t = tries() + 1; tries(t);
       if (t >= MAX_TRY) { setLock(); updateLockUI(); }
       msg.textContent = "Usuário ou senha inválidos.";
     }
+    document.getElementById('btnLogout').addEventListener('click', () => { setSession(false); showLogin(); });
 
-    /* ====== Logout ====== */
-    document.getElementById('btnLogout').addEventListener('click', () => {
-      setSession(false); showLogin();
-    });
-
-    /* ====== Tabs ====== */
+    // Tabs
     document.querySelectorAll('.tab').forEach(el => {
       el.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -218,33 +191,27 @@
       });
     });
 
-    /* ====== Storage helpers (mock local) ====== */
+    // ===== STATE no admin (cache local p/ rascunho) =====
     const KEY = "admin_content_v1";
-    const state = load() || {
-      sobre: "",
-      consultas: [],
-      feiticos: [],
-      depo: [],
-      agenda: [],
-      cupons: []
-    };
-    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
-    function load() { try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
+    const state = load() || { sobre:"", consultas:[], feiticos:[], depo:[], agenda:[], cupons:[] };
+    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+    function load(){ try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
 
-    /* ====== SOBRE ====== */
-    const sobreTxt = document.getElementById('sobreTxt');
-    sobreTxt.value = state.sobre || "";
+    // Sobre
+    const sobreTxt = document.getElementById('sobreTxt'); sobreTxt.value = state.sobre || "";
     document.querySelector('[data-save="sobre"]').addEventListener('click', () => { state.sobre = sobreTxt.value; save(); alert('Salvo!'); });
 
-    /* ====== CONSULTAS ====== */
+    // Consultas
     const elLC = document.getElementById('listaConsultas');
-    function renderConsultas() {
-      elLC.innerHTML = state.consultas.map((c, i) => `
-    <div class="card">
-      <strong>${c.titulo || '-'}</strong><div class="muted">${c.desc || ''}</div><div>${c.preco || ''}</div>
-      <div style="margin-top:8px"><button class="btn" data-delc="${i}">Remover</button></div>
-    </div>`).join('');
-      elLC.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => { state.consultas.splice(parseInt(b.dataset.delc, 10), 1); save(); renderConsultas(); });
+    function renderConsultas(){
+      elLC.innerHTML = state.consultas.map((c,i)=>`
+        <div class="card">
+          <strong>${c.titulo || '-'}</strong>
+          <div class="muted">${c.desc || ''}</div>
+          <div>${c.preco || ''}</div>
+          <div style="margin-top:8px"><button class="btn" data-delc="${i}">Remover</button></div>
+        </div>`).join('');
+      elLC.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => { state.consultas.splice(parseInt(b.dataset.delc,10),1); save(); renderConsultas(); });
     }
     renderConsultas();
     document.getElementById('addConsulta').addEventListener('click', () => {
@@ -252,17 +219,22 @@
       const d = document.getElementById('c_desc').value.trim();
       const p = document.getElementById('c_preco').value.trim();
       if (!t) return alert('Informe ao menos o título.');
-      state.consultas.push({ titulo: t, desc: d, preco: p }); save(); renderConsultas();
-      ['c_titulo', 'c_desc', 'c_preco'].forEach(id => document.getElementById(id).value = "");
+      state.consultas.push({ titulo:t, desc:d, preco:p });
+      save(); renderConsultas();
+      ['c_titulo','c_desc','c_preco'].forEach(id => document.getElementById(id).value="");
     });
 
-    /* ====== FEITIÇOS ====== */
+    // Feitiços
     const elLF = document.getElementById('listaFeiticos');
-    function renderFeiticos() {
-      elLF.innerHTML = state.feiticos.map((f, i) => `
-    <div class="card"><span class="muted">${f.badge || ''}</span><strong style="display:block">${f.titulo || '-'}</strong><div class="muted">${f.desc || ''}</div>
-    <div style="margin-top:8px"><button class="btn" data-delf="${i}">Remover</button></div></div>`).join('');
-      elLF.querySelectorAll('[data-delf]').forEach(b => b.onclick = () => { state.feiticos.splice(parseInt(b.dataset.delf, 10), 1); save(); renderFeiticos(); });
+    function renderFeiticos(){
+      elLF.innerHTML = state.feiticos.map((f,i)=>`
+        <div class="card">
+          <span class="muted">${f.badge || ''}</span>
+          <strong style="display:block">${f.titulo || '-'}</strong>
+          <div class="muted">${f.desc || ''}</div>
+          <div style="margin-top:8px"><button class="btn" data-delf="${i}">Remover</button></div>
+        </div>`).join('');
+      elLF.querySelectorAll('[data-delf]').forEach(b => b.onclick = () => { state.feiticos.splice(parseInt(b.dataset.delf,10),1); save(); renderFeiticos(); });
     }
     renderFeiticos();
     document.getElementById('addFeitico').addEventListener('click', () => {
@@ -270,63 +242,47 @@
       const b = document.getElementById('f_badge').value.trim();
       const d = document.getElementById('f_desc').value.trim();
       if (!t) return alert('Informe ao menos o título.');
-      state.feiticos.push({ titulo: t, badge: b, desc: d }); save(); renderFeiticos();
-      ['f_titulo', 'f_badge', 'f_desc'].forEach(id => document.getElementById(id).value = "");
+      state.feiticos.push({ titulo:t, badge:b, desc:d });
+      save(); renderFeiticos();
+      ['f_titulo','f_badge','f_desc'].forEach(id => document.getElementById(id).value="");
     });
 
-    /* ====== DEPOIMENTOS (imagens) ====== */
+    // Depoimentos (upload -> base64)
     const elLD = document.getElementById('listaDepo');
-    function renderDepo() {
-      elLD.innerHTML = state.depo.map((d, i) => `
-    <div class="card">
-      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-        <img src="${d.url}" alt="${(d.alt || '')}" style="max-width:120px; max-height:120px; border-radius:8px; border:1px solid rgba(255,255,255,.15)">
-        <div>
-          <div class="muted" style="word-break:break-all; max-width:420px">${(d.alt || '').replace(/</g, '&lt;')}</div>
-          <div style="margin-top:8px"><button class="btn" data-deld="${i}">Remover</button></div>
-        </div>
-      </div>
-    </div>`).join('');
-      elLD.querySelectorAll('[data-deld]').forEach(b => b.onclick = () => {
-        state.depo.splice(parseInt(b.dataset.deld, 10), 1);
-        save(); renderDepo();
-      });
+    function renderDepo(){
+      elLD.innerHTML = state.depo.map((d,i)=>`
+        <div class="card">
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <img src="${d.url}" alt="${(d.alt || '')}" style="max-width:120px; max-height:120px; border-radius:8px; border:1px solid rgba(255,255,255,.15)">
+            <div>
+              <div class="muted" style="word-break:break-all; max-width:420px">${(d.alt || '').replace(/</g,'&lt;')}</div>
+              <div style="margin-top:8px"><button class="btn" data-deld="${i}">Remover</button></div>
+            </div>
+          </div>
+        </div>`).join('');
+      elLD.querySelectorAll('[data-deld]').forEach(b => b.onclick = () => { state.depo.splice(parseInt(b.dataset.deld,10),1); save(); renderDepo(); });
     }
-
-    // 1) renderiza os depoimentos ao carregar
     renderDepo();
-
-    // 2) botão "Adicionar imagem" (upload -> base64 -> salvar)
     document.getElementById('addDepo').addEventListener('click', () => {
       const file = document.getElementById('d_file').files?.[0];
       const alt = (document.getElementById('d_alt').value || '').trim();
-      if (!file) { alert('Selecione uma imagem.'); return; }
-
+      if (!file) return alert('Selecione uma imagem.');
       const reader = new FileReader();
-      reader.onload = () => {
-        const dataUrl = reader.result; // data:image/...;base64,AAAA
-        state.depo.push({ url: dataUrl, alt });
-        save();
-        renderDepo();
-        // limpa campos
-        document.getElementById('d_file').value = "";
-        document.getElementById('d_alt').value = "";
-      };
+      reader.onload = () => { state.depo.push({ url: reader.result, alt }); save(); renderDepo(); document.getElementById('d_file').value=""; document.getElementById('d_alt').value=""; };
       reader.onerror = () => alert('Erro ao ler a imagem.');
       reader.readAsDataURL(file);
     });
 
-
-    /* ====== AGENDA ====== */
+    // Agenda
     const elLA = document.getElementById('listaAgenda');
-    function renderAgenda() {
-      elLA.innerHTML = state.agenda.map((a, i) => `
-    <div class="card">
-      <strong>${a.data || ''} ${a.hora || ''}</strong>
-      <div class="muted">${a.obs || ''}</div>
-      <div style="margin-top:8px"><button class="btn" data-dela="${i}">Remover</button></div>
-    </div>`).join('');
-      elLA.querySelectorAll('[data-dela]').forEach(b => b.onclick = () => { state.agenda.splice(parseInt(b.dataset.dela, 10), 1); save(); renderAgenda(); });
+    function renderAgenda(){
+      elLA.innerHTML = state.agenda.map((a,i)=>`
+        <div class="card">
+          <strong>${a.data || ''} ${a.hora || ''}</strong>
+          <div class="muted">${a.obs || ''}</div>
+          <div style="margin-top:8px"><button class="btn" data-dela="${i}">Remover</button></div>
+        </div>`).join('');
+      elLA.querySelectorAll('[data-dela]').forEach(b => b.onclick = () => { state.agenda.splice(parseInt(b.dataset.dela,10),1); save(); renderAgenda(); });
     }
     renderAgenda();
     document.getElementById('addAgenda').addEventListener('click', () => {
@@ -334,19 +290,20 @@
       const hora = document.getElementById('a_hora').value;
       const obs = document.getElementById('a_obs').value.trim();
       if (!data) return alert('Informe a data.');
-      state.agenda.push({ data, hora, obs }); save(); renderAgenda();
-      ['a_data', 'a_hora', 'a_obs'].forEach(id => document.getElementById(id).value = "");
+      state.agenda.push({ data, hora, obs });
+      save(); renderAgenda();
+      ['a_data','a_hora','a_obs'].forEach(id => document.getElementById(id).value="");
     });
 
-    /* ====== CUPONS ====== */
+    // Cupons
     const elLP = document.getElementById('listaCupons');
-    function renderCupons() {
-      elLP.innerHTML = state.cupons.map((c, i) => `
-    <div class="card">
-      <strong>${c.codigo}</strong> — <span class="muted">${c.desc || ''}</span> — ativo: <b>${c.ativo}</b>
-      <div style="margin-top:8px"><button class="btn" data-delp="${i}">Remover</button></div>
-    </div>`).join('');
-      elLP.querySelectorAll('[data-delp]').forEach(b => b.onclick = () => { state.cupons.splice(parseInt(b.dataset.delp, 10), 1); save(); renderCupons(); });
+    function renderCupons(){
+      elLP.innerHTML = state.cupons.map((c,i)=>`
+        <div class="card">
+          <strong>${c.codigo}</strong> — <span class="muted">${c.desc || ''}</span> — ativo: <b>${!!c.ativo}</b>
+          <div style="margin-top:8px"><button class="btn" data-delp="${i}">Remover</button></div>
+        </div>`).join('');
+      elLP.querySelectorAll('[data-delp]').forEach(b => b.onclick = () => { state.cupons.splice(parseInt(b.dataset.delp,10),1); save(); renderCupons(); });
     }
     renderCupons();
     document.getElementById('addCupom').addEventListener('click', () => {
@@ -354,96 +311,89 @@
       const desc = (document.getElementById('p_desc').value || "").trim();
       const ativo = ((document.getElementById('p_ativo').value || "false").trim().toLowerCase() === 'true');
       if (!codigo) return alert('Informe o código.');
-      // se existir, atualiza; se não, cria
       const i = state.cupons.findIndex(c => c.codigo === codigo);
       const obj = { codigo, desc, ativo };
       if (i >= 0) state.cupons[i] = obj; else state.cupons.push(obj);
       save(); renderCupons();
-      ['p_codigo', 'p_desc', 'p_ativo'].forEach(id => document.getElementById(id).value = "");
+      ['p_codigo','p_desc','p_ativo'].forEach(id => document.getElementById(id).value="");
     });
 
-    /*  */
-    /* ====== SALVAR (admin) ====== */
-    /* Exemplo de estrutura mínima. Ajuste para bater com seus campos do painel. */
-    function salvarAdmin() {
-      // monta o pacote a partir do "state" que você já mantém no admin
-      const data = {
-        about: state.sobre || "",
-        consultas: Array.isArray(state.consultas) ? state.consultas.map(c => ({
-          titulo: c.titulo || "",
-          desc: c.desc || "",
-          preco: c.preco || "",
-          badge: c.badge || ""   // se não usar, fica vazio e tudo bem
-        })) : [],
-        feiticos: Array.isArray(state.feiticos) ? state.feiticos.map(f => ({
-          titulo: f.titulo || "",
-          desc: f.desc || "",
-          badge: f.badge || ""
-        })) : [],
-        depoimentos: Array.isArray(state.depo) ? state.depo.map(d => ({
-          img: d.url || "",
-          alt: d.alt || ""
-        })) : [],
-        agenda: Array.isArray(state.agenda) ? state.agenda.map(a => {
-          const iso = (a.data ? `${a.data}T${a.hora || "23:59"}` : "").trim();
-          const d = iso ? new Date(iso) : null;
-          return d && !isNaN(d) ? { date: d.toISOString(), obs: a.obs || "" } : null;
-        }).filter(Boolean) : [],
-
-        cupons: Array.isArray(state.cupons) ? state.cupons.map(c => ({
-          codigo: c.codigo || "",
-          desconto: c.desc || "",  // o site público usa .desconto (com fallback)
-          ativo: !!c.ativo
-        })) : []
-      };
-
-      localStorage.setItem('tm_data', JSON.stringify(data));
-    }
-
-
-    // Botão "Publicar no site" — monta tm_data, salva e avisa a outra aba
-    const btnPublish = document.getElementById('btnPublish');
-    if (btnPublish) {
-      btnPublish.addEventListener('click', () => {
-        try { salvarAdmin(); } catch (e) { }
-        // "Avisa" a home que tem conteúdo novo
-        localStorage.setItem('tm_ping', Date.now().toString());
-        alert('Publicado! Abra/atualize a página pública para ver as mudanças.');
-      });
-    }
-
-
-
-    /* ====== Export JSON ====== */
+    // Export JSON
     document.getElementById('btnExport').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'conteudo-site.json';
-      a.click();
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type:'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'conteudo-site.json'; a.click();
       URL.revokeObjectURL(a.href);
     });
 
-    /* Ao clicar no nome no admin:
-       1) salva o que estiver no painel
-       2) emite um "ping" para outras abas atualizarem
-       3) deixa a navegação seguir para a home normalmente */
+    // Salvar local e pingar site quando clica no título
     (function () {
-      const els = [
-        document.getElementById('brandHome'),      // título na tela de login
-        document.getElementById('brandHomeDash')   // título no dashboard
-      ].filter(Boolean);
-
+      const els = [ document.getElementById('brandHomeDash') ].filter(Boolean);
       els.forEach((el) => {
         el.addEventListener('click', function () {
-          try { salvarAdmin(); } catch (e) { }
+          try { salvarAdmin(); } catch (e) {}
           localStorage.setItem('tm_ping', Date.now().toString());
-          // deixa navegar normalmente para a home
         });
       });
     })();
+  </script>
 
+  <!-- ===== FIREBASE (compat) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Config do projeto
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQ4Av4udzvTK3neobf6qWae0Hj-zujqg",
+      authDomain: "oraculos-magician.firebaseapp.com",
+      projectId: "oraculos-magician",
+      storageBucket: "oraculos-magician.appspot.com",
+      messagingSenderId: "920773742288",
+      appId: "1:920773742288:web:456563b2b37bc3ba19dc5",
+      measurementId: "G-7XG7NQT879"
+    };
+    try { firebase.initializeApp(firebaseConfig); } catch(e){}
+    const db = firebase.firestore();
+
+    // Monta pacote oficial p/ publicar (mapeia desc -> desconto)
+    function montarPacote() {
+      return {
+        about: state.sobre || "",
+        consultas: (state.consultas || []).map(c => ({
+          titulo: c.titulo || "", desc: c.desc || "", preco: c.preco || "", badge: c.badge || ""
+        })),
+        feiticos: (state.feiticos || []).map(f => ({
+          titulo: f.titulo || "", desc: f.desc || "", badge: f.badge || ""
+        })),
+        depoimentos: (state.depo || []).map(d => ({ img: d.url || "", alt: d.alt || "" })),
+        agenda: (state.agenda || []).map(a => {
+          const iso = (a.data ? `${a.data}T${a.hora || "23:59"}` : "").trim();
+          const d = iso ? new Date(iso) : null;
+          return d && !isNaN(d) ? { date: d.toISOString(), obs: a.obs || "" } : null;
+        }).filter(Boolean),
+        cupons: (state.cupons || []).map(c => ({
+          codigo: c.codigo || "", desconto: c.desc || "", ativo: !!c.ativo
+        }))
+      };
+    }
+
+    async function salvarAdmin() {
+      try {
+        const data = montarPacote();
+        // salva também em localStorage (pré-visualização rápida)
+        localStorage.setItem('tm_data', JSON.stringify(data));
+        // publica no Firestore (todos veem)
+        await db.collection("siteData").doc("conteudo").set(data);
+        alert("Publicado com sucesso!");
+      } catch (e) {
+        console.error("Erro ao salvar:", e);
+        alert("Erro ao publicar no Firebase.");
+      }
+    }
+
+    document.getElementById('btnPublish').addEventListener('click', async () => {
+      await salvarAdmin();
+      localStorage.setItem('tm_ping', Date.now().toString());
+    });
   </script>
 </body>
-
 </html>

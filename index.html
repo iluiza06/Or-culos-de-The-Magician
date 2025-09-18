@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oráculos de The Magician</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap"
-    rel="stylesheet">
 
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
-  <!-- galáxia animada (UM ÚNICO PAR de canvas) -->
+  <!-- fundo galáxia -->
   <canvas id="bg-nebula" aria-hidden="true"></canvas>
   <canvas id="bg-stars" aria-hidden="true"></canvas>
 
@@ -39,23 +37,16 @@
           <a href="#promocoes" class="chip">🎁 Promoção</a>
         </div>
 
-        <!-- SOBRE MIM (placeholder visual, como estava) -->
         <!-- SOBRE MIM -->
         <section class="section about">
           <h2>🌙 Sobre Mim</h2>
           <div class="about-grid card">
             <div class="about-text">
-              <p class="muted">
-              </p>
-              <ul class="about-list">
-
-              </ul>
+              <p class="muted"></p>
+              <ul class="about-list"></ul>
             </div>
-
-
           </div>
         </section>
-
       </section>
 
       <!-- CONSULTAS -->
@@ -63,40 +54,7 @@
         <h2>Consultas & Oráculos</h2>
         <div class="carousel">
           <button class="arrow left" data-to="#c1">‹</button>
-          <div class="rail" id="c1">
-            <article class="card card-slide">
-              <span class="badge">Pergunta</span>
-              <h3 style="margin:8px 0 4px">1 Pergunta</h3>
-              <p class="muted">Resposta objetiva para uma questão direta.</p>
-              <div class="price">R$ 12</div>
-              <div class="divider"></div>
-              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
-            </article>
-            <article class="card card-slide">
-              <span class="badge">Perguntas</span>
-              <h3 style="margin:8px 0 4px">3 Perguntas</h3>
-              <p class="muted">Três focos centrais com conselho.</p>
-              <div class="price">R$ 69</div>
-              <div class="divider"></div>
-              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
-            </article>
-            <article class="card card-slide">
-              <span class="badge">Perguntas</span>
-              <h3 style="margin:8px 0 4px">6 Perguntas</h3>
-              <p class="muted">Leitura completa de temas variados.</p>
-              <div class="price">R$ 109</div>
-              <div class="divider"></div>
-              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
-            </article>
-            <article class="card card-slide">
-              <span class="badge">Mesa</span>
-              <h3 style="margin:8px 0 4px">Mesa Aberta</h3>
-              <p class="muted">Exploração livre: áreas, ciclos e bloqueios.</p>
-              <div class="price">R$ 149</div>
-              <div class="divider"></div>
-              <a class="btn" href="#contato">Agendar <span class="spark"></span></a>
-            </article>
-          </div>
+          <div class="rail" id="c1"></div>
           <button class="arrow right" data-to="#c1">›</button>
         </div>
       </section>
@@ -106,26 +64,7 @@
         <h2>Feitiços & Ritualística</h2>
         <div class="carousel">
           <button class="arrow left" data-to="#c2">‹</button>
-          <div class="rail" id="c2">
-            <article class="card card-slide">
-              <span class="badge">Cura</span>
-              <h3 style="margin:8px 0 4px">Equilíbrio & Limpeza</h3>
-              <p class="muted">Higienização energética, serenidade e foco.</p>
-              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
-            </article>
-            <article class="card card-slide">
-              <span class="badge">Prosperidade</span>
-              <h3 style="margin:8px 0 4px">Abertura de Caminhos</h3>
-              <p class="muted">Fartura, oportunidades e segurança material.</p>
-              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
-            </article>
-            <article class="card card-slide">
-              <span class="badge">Banimento</span>
-              <h3 style="margin:8px 0 4px">Cortes & Proteção</h3>
-              <p class="muted">Quebra de laços nocivos e blindagem.</p>
-              <a href="#contato" class="btn">Solicitar <span class="spark"></span></a>
-            </article>
-          </div>
+          <div class="rail" id="c2"></div>
           <button class="arrow right" data-to="#c2">›</button>
         </div>
         <div class="space"></div>
@@ -153,8 +92,9 @@
           <div style="display:flex; justify-content:center">
             <a class="btn" href="#contato">Reservar sua vaga <span class="spark"></span></a>
           </div>
-          <p class="muted" style="margin:10px 0 0; text-align:center">Próxima data: <span id="ritualDate"
-              style="color:var(--gold-300)"></span></p>
+          <p class="muted" style="margin:10px 0 0; text-align:center">
+            Próxima data: <span id="ritualDate" style="color:var(--gold-300)"></span>
+          </p>
         </div>
       </section>
 
@@ -174,37 +114,14 @@
       </section>
 
       <!-- DEPOIMENTOS -->
-      <!-- DEPOIMENTOS -->
       <section id="depoimentos" class="section">
         <h2>Depoimentos</h2>
         <div class="carousel">
           <button class="arrow left" data-to="#c3" aria-label="Anterior">‹</button>
-
-          <div class="rail" id="c3">
-            <figure class="testi-card card">
-              <div class="testi-frame">
-                <img class="testi-img" src="IMAGENS/depo1.jpg" alt="Depoimento via WhatsApp 1">
-              </div>
-            </figure>
-
-            <figure class="testi-card card">
-              <div class="testi-frame">
-                <img class="testi-img" src="./img/Captura de tela 2025-09-11 084031.png"
-                  alt="Depoimento via WhatsApp 2">
-              </div>
-            </figure>
-
-            <figure class="testi-card card">
-              <div class="testi-frame">
-                <img class="testi-img" src="IMAGENS/depo3.jpg" alt="Depoimento via WhatsApp 3">
-              </div>
-            </figure>
-          </div>
-
+          <div class="rail" id="c3"></div>
           <button class="arrow right" data-to="#c3" aria-label="Próximo">›</button>
         </div>
       </section>
-
 
       <!-- CONTATO -->
       <section id="contato" class="section">
@@ -216,37 +133,31 @@
               <input id="nome" required placeholder="Seu nome" />
               <select id="assunto" required>
                 <option value="" selected disabled>Assunto</option>
-                <!-- Consultas -->
                 <option value="pergunta1">1 Pergunta</option>
                 <option value="perguntas3">3 Perguntas</option>
                 <option value="perguntas6">6 Perguntas</option>
                 <option value="mesa">Mesa Aberta</option>
-                <!-- Feitiços / Ritualística -->
                 <option value="limpeza">Equilíbrio & Limpeza</option>
                 <option value="prosperidade">Abertura de Caminhos</option>
                 <option value="banimento">Cortes & Proteção</option>
-                <!-- Genérico -->
                 <option value="duvida">Dúvida geral</option>
               </select>
             </div>
-
             <div class="space"></div>
             <textarea required placeholder="Sua mensagem"></textarea>
             <div class="space"></div>
             <button class="btn" type="submit">Enviar <span class="spark"></span></button>
-
           </form>
         </div>
+
         <div class="card">
           <h3 style="margin:0 0 6px; color:var(--gold-300)">Redes & WhatsApp</h3>
           <div style="display:flex; gap:8px; flex-wrap:wrap">
             <a class="btn" style="background:linear-gradient(180deg,#aef7a6,#5df072)"
-              href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço.">💬 WhatsApp
-              <span class="spark"></span></a>
+              href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço.">💬 WhatsApp <span class="spark"></span></a>
             <a class="btn" href="https://www.instagram.com/le._bateleur?igsh=MnVjbG05cDM0Y29h" target="_blank">
               📸 Instagram <span class="spark"></span>
             </a>
-
           </div>
           <p class="muted" style="margin-top:8px">Botão verde flutuante sempre visível no canto.</p>
         </div>
@@ -262,15 +173,18 @@
 
   <!-- botão flutuante whatsapp -->
   <a title="WhatsApp" href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço."
-    style="position:fixed; left:16px; bottom:calc(var(--tabbar-h) + 18px); width:56px; height:56px; border-radius:50%; display:grid; place-items:center; z-index:65; text-decoration:none; background:linear-gradient(180deg,#aef7a6,#5df072); color:#0b1b0f; font-weight:900; box-shadow:0 10px 18px rgba(20,255,88,.2)">💬</a>
+     style="position:fixed; left:16px; bottom:calc(var(--tabbar-h) + 18px); width:56px; height:56px; border-radius:50%; display:grid; place-items:center; z-index:65; text-decoration:none; background:linear-gradient(180deg,#aef7a6,#5df072); color:#0b1b0f; font-weight:900; box-shadow:0 10px 18px rgba(20,255,88,.2)">💬</a>
 
-  <Script>
+  <!-- ===== SCRIPTS DO SITE (galáxia, atalhos, contato, carrosséis) ===== -->
+  <script>
+    // ano no rodapé
+    document.getElementById('year').textContent = new Date().getFullYear();
+
     // ====== GALÁXIA ANIMADA ======
     const cnvN = document.getElementById('bg-nebula');
     const cnvS = document.getElementById('bg-stars');
     const nctx = cnvN.getContext('2d');
     const sctx = cnvS.getContext('2d');
-
     let W = 0, H = 0;
     function resize() {
       W = cnvN.width = cnvS.width = innerWidth;
@@ -292,7 +206,6 @@
       const g = nctx.createRadialGradient(W * .5, H * .5, Math.min(W, H) * .1, W * .5, H * .5, Math.max(W, H) * .8);
       g.addColorStop(0, '#12152a'); g.addColorStop(1, '#0b0713');
       nctx.fillStyle = g; nctx.fillRect(0, 0, W, H);
-
       blobs.forEach((b, idx) => {
         const px = (b.x + Math.sin(t * 0.00008 + idx) * 0.015) * W;
         const py = (b.y + Math.cos(t * 0.00006 + idx) * 0.02) * H;
@@ -323,81 +236,8 @@
         sctx.fillStyle = `rgba(255,255,255,${.35 + tw * .55})`; sctx.fill();
       }
     }
-
     function loop(t) { drawNebula(t); drawStars(); requestAnimationFrame(loop) }
     requestAnimationFrame(loop);
-
-    // ano no rodapé
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // ====== CONTATO -> WhatsApp com mensagem pronta (com validação p/ Dúvida Geral) ======
-    function enviarWhatsapp(e) {
-      e.preventDefault();
-
-      const PHONE = "5579998234443"; // seu número
-      const nome = (document.getElementById('nome')?.value || '').trim();
-      const assuntoSel = document.getElementById('assunto');
-      const assunto = assuntoSel?.value || '';
-      const textarea = document.querySelector('#contato textarea');
-      const textoLivre = (textarea?.value || '').trim();
-
-      // Se assunto = "duvida", obrigar a preencher "Sua mensagem"
-      if (assunto === 'duvida' && !textoLivre) {
-        // Ajusta UX (placeholder + foco) sem alterar o layout
-        if (textarea) {
-          textarea.placeholder = 'Descreva sua dúvida geral aqui...';
-          textarea.required = true;
-          textarea.focus();
-        }
-        alert('Por favor, descreva sua dúvida no campo "Sua mensagem".');
-        return;
-      }
-
-      // Mensagens por assunto
-      const msgs = {
-        pergunta1: "Quero agendar 1 Pergunta (resposta objetiva).",
-        perguntas3: "Quero agendar 3 Perguntas (três focos com conselho).",
-        perguntas6: "Quero agendar 6 Perguntas (leitura completa).",
-        mesa: "Quero agendar uma Mesa Aberta (exploração livre).",
-        limpeza: "Gostaria do ritual Equilíbrio & Limpeza.",
-        prosperidade: "Gostaria do ritual Abertura de Caminhos (prosperidade).",
-        banimento: "Preciso do ritual Cortes & Proteção (banimento).",
-        duvida: "Tenho uma dúvida geral e gostaria de orientação."
-      };
-
-      const assuntoTxt = msgs[assunto] || "Tenho interesse e gostaria de mais informações.";
-      const saudacao = nome ? `Olá! Sou ${nome}. ` : "Olá! ";
-      const extra = textoLivre ? `\n\nDetalhes: ${textoLivre}` : "";
-
-      const msg = `${saudacao}${assuntoTxt}${extra}\n\n(Enviado pelo site)`;
-      const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
-
-      window.open(url, '_blank');
-    }
-
-    /* / Ajuste dinâmico do placeholder/required conforme o assunto */
-    (function () {
-      const assuntoSel = document.getElementById('assunto');
-      const textarea = document.querySelector('#contato textarea');
-      if (!assuntoSel || !textarea) return;
-
-      function syncMensagemRequisito() {
-        if (assuntoSel.value === 'duvida') {
-          textarea.required = true;
-          if (!textarea.value.trim()) {
-            textarea.placeholder = 'Descreva sua dúvida geral aqui...';
-          }
-        } else {
-          // volta ao comportamento padrão do seu site (mensagem opcional)
-          textarea.required = false;
-          // mantenho seu placeholder atual; não altero se já tiver texto
-        }
-      }
-
-      assuntoSel.addEventListener('change', syncMensagemRequisito);
-      // aplica uma vez ao carregar
-      syncMensagemRequisito();
-    })();
 
     // ===== Carrosséis: setas movem o trilho =====
     document.querySelectorAll('.arrow').forEach(btn => {
@@ -410,190 +250,230 @@
       });
     });
 
+    // ====== CONTATO -> WhatsApp ======
+    function enviarWhatsapp(e) {
+      e.preventDefault();
+      const PHONE = "5579998234443";
+      const nome = (document.getElementById('nome')?.value || '').trim();
+      const assunto = document.getElementById('assunto')?.value || '';
+      const textarea = document.querySelector('#contato textarea');
+      const textoLivre = (textarea?.value || '').trim();
+      if (assunto === 'duvida' && !textoLivre) {
+        if (textarea) { textarea.placeholder = 'Descreva sua dúvida geral aqui...'; textarea.required = true; textarea.focus(); }
+        alert('Por favor, descreva sua dúvida no campo "Sua mensagem".'); return;
+      }
+      const msgs = {
+        pergunta1: "Quero agendar 1 Pergunta (resposta objetiva).",
+        perguntas3: "Quero agendar 3 Perguntas (três focos com conselho).",
+        perguntas6: "Quero agendar 6 Perguntas (leitura completa).",
+        mesa: "Quero agendar uma Mesa Aberta (exploração livre).",
+        limpeza: "Gostaria do ritual Equilíbrio & Limpeza.",
+        prosperidade: "Gostaria do ritual Abertura de Caminhos (prosperidade).",
+        banimento: "Preciso do ritual Cortes & Proteção (banimento).",
+        duvida: "Tenho uma dúvida geral e gostaria de orientação."
+      };
+      const assuntoTxt = msgs[assunto] || "Tenho interesse e gostaria de mais informações.";
+      const saudacao = nome ? `Olá! Sou ${nome}. ` : "Olá! ";
+      const extra = textoLivre ? `\n\nDetalhes: ${textoLivre}` : "";
+      const msg = `${saudacao}${assuntoTxt}${extra}\n\n(Enviado pelo site)`;
+      window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
 
-    // === Atalho secreto para abrir o admin ===
-    // 1 Tocar/clicar no logo 5x em até 3s
-    // 2  Desktop: Shift + Alt + A
-
+    // === Atalho secreto p/ ADMIN: 5 toques no logo ou Shift+Alt+A
     (function () {
       const TARGET = document.querySelector('.name, .brand, .sigil') || document.body;
       let taps = 0, timer = null;
-
-      function openAdmin() { location.href = 'admin.html'; } // ajuste o caminho se necessário
-
+      function openAdmin() { location.href = 'admin.html'; }
       function registerTap() {
         taps++;
         if (taps >= 5) { openAdmin(); return; }
-        clearTimeout(timer);
-        timer = setTimeout(() => { taps = 0; }, 3000);
+        clearTimeout(timer); timer = setTimeout(() => { taps = 0; }, 3000);
       }
-
       TARGET.addEventListener('click', registerTap, { passive: true });
       TARGET.addEventListener('touchend', registerTap, { passive: true });
-
       document.addEventListener('keydown', (e) => {
         if (e.shiftKey && e.altKey && (e.key === 'A' || e.key === 'a')) openAdmin();
       });
     })();
 
+    // util p/ criar elementos
+    const el = (tag, attrs = {}, html = "") => {
+      const n = document.createElement(tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (html) n.innerHTML = html;
+      return n;
+    };
+  </script>
 
-    (function () {
-      const raw = localStorage.getItem('tm_data');
-      if (!raw) return; // nada salvo ainda
-      let data = {};
-      try { data = JSON.parse(raw) || {}; } catch (e) { }
+  <!-- ===== FIREBASE (compat) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Config do seu projeto
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQ4Av4udzvTK3neobf6qWae0Hj-zujqg",
+      authDomain: "oraculos-magician.firebaseapp.com",
+      projectId: "oraculos-magician",
+      storageBucket: "oraculos-magician.appspot.com",
+      messagingSenderId: "920773742288",
+      appId: "1:920773742288:web:456563b2b37bc3ba19dc5",
+      measurementId: "G-7XG7NQT879"
+    };
+    try { firebase.initializeApp(firebaseConfig); } catch(e){}
+    const db = firebase.firestore();
 
-      /* — Sobre mim — */
-      if (data.about) {
-        const aboutP = document.querySelector('.about .about-text .muted');
-        if (aboutP) aboutP.innerHTML = data.about.replace(/\n/g, '<br>');
-      }
+    // guarda tudo o que o site carregou (cache + firestore)
+    window.__siteData = { cupons: [] };
 
-      /* helpers de criação */
-      const el = (tag, attrs = {}, html = "") => {
-        const n = document.createElement(tag);
-        for (const k in attrs) n.setAttribute(k, attrs[k]);
-        if (html) n.innerHTML = html;
-        return n;
-      };
-
-      /* — Consultas (#c1) — */
-      if (Array.isArray(data.consultas) && data.consultas.length) {
-        const rail = document.querySelector('#c1');
-        if (rail) {
-          rail.innerHTML = "";
-          data.consultas.forEach(item => {
-            const card = el('article', { class: 'card card-slide' });
-            if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
-            if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
-            if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
-            if (item.preco) card.appendChild(el('div', { class: 'price' }, item.preco));
-            card.appendChild(el('div', { class: 'divider' }));
-            card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Agendar <span class="spark"></span>'));
-            rail.appendChild(card);
-          });
-        }
-      }
-
-      /* — Feitiços (#c2) — */
-      if (Array.isArray(data.feiticos) && data.feiticos.length) {
-        const rail = document.querySelector('#c2');
-        if (rail) {
-          rail.innerHTML = "";
-          data.feiticos.forEach(item => {
-            const card = el('article', { class: 'card card-slide' });
-            if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
-            if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
-            if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
-            card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Solicitar <span class="spark"></span>'));
-            rail.appendChild(card);
-          });
-        }
-      }
-
-      /* — Depoimentos por foto (#c3) — */
-      if (Array.isArray(data.depoimentos) && data.depoimentos.length) {
-        const rail = document.querySelector('#c3');
-        if (rail) {
-          rail.innerHTML = "";
-          data.depoimentos.forEach(item => {
-            if (!item.img) return;
-            const fig = el('figure', { class: 'testi-card card' });
-            const frame = el('div', { class: 'testi-frame' });
-            const img = el('img', { class: 'testi-img', src: item.img, alt: 'Depoimento' });
-            frame.appendChild(img);
-            fig.appendChild(frame);
-            rail.appendChild(fig);
-          });
-        }
-      }
-
-       (function () {
-    const raw = localStorage.getItem('tm_data');
-    if (!raw) return;
-    let data = {};
-    try { data = JSON.parse(raw) || {}; } catch (e) {}
-
-    // ... (sobre, consultas, feitiços, depoimentos)
-
-    /* — Agenda (pega a próxima data futura) — */
-    if (Array.isArray(data.agenda) && data.agenda.length) {
+    // ===== RENDER =====
+    function renderSobre(about) {
+      const aboutP = document.querySelector('.about .about-text .muted');
+      if (aboutP) aboutP.innerHTML = (about || "").replace(/\n/g, '<br>');
+    }
+    function renderConsultas(lista = []) {
+      const rail = document.querySelector('#c1'); if (!rail) return;
+      rail.innerHTML = "";
+      (lista||[]).forEach(item => {
+        const card = el('article', { class: 'card card-slide' });
+        if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
+        if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
+        if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
+        if (item.preco) card.appendChild(el('div', { class: 'price' }, item.preco));
+        card.appendChild(el('div', { class: 'divider' }));
+        card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Agendar <span class="spark"></span>'));
+        rail.appendChild(card);
+      });
+    }
+    function renderFeiticos(lista = []) {
+      const rail = document.querySelector('#c2'); if (!rail) return;
+      rail.innerHTML = "";
+      (lista||[]).forEach(item => {
+        const card = el('article', { class: 'card card-slide' });
+        if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
+        if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
+        if (item.desc) card.appendChild(el('p', { class: 'muted' }, item.desc));
+        card.appendChild(el('a', { class: 'btn', href: '#contato' }, 'Solicitar <span class="spark"></span>'));
+        rail.appendChild(card);
+      });
+    }
+    function renderDepo(lista = []) {
+      const rail = document.querySelector('#c3'); if (!rail) return;
+      rail.innerHTML = "";
+      (lista||[]).forEach(item => {
+        if (!item.img) return;
+        const fig = el('figure', { class: 'testi-card card' });
+        const frame = el('div', { class: 'testi-frame' });
+        const img = el('img', { class: 'testi-img', src: item.img, alt: item.alt || 'Depoimento' });
+        frame.appendChild(img); fig.appendChild(frame); rail.appendChild(fig);
+      });
+    }
+    function renderAgenda(lista = []) {
       const now = new Date();
-
-      const futuras = (data.agenda || [])
+      const futuras = (lista||[])
         .map(x => (typeof x === 'string' ? { date: x, obs: '' } : x))
         .map(x => ({ d: new Date(x.date), obs: x.obs || '' }))
         .filter(o => !isNaN(o.d) && o.d >= now)
         .sort((a, b) => a.d - b.d);
-
-      if (futuras[0]) {
-        const d = futuras[0].d;
-        const obs = futuras[0].obs;
-
-        const elDate = document.getElementById('ritualDate');
-        if (elDate) {
-          let fmt = d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-          if (obs) fmt += ` — ${obs}`;
-          elDate.textContent = fmt;
+      if (!futuras[0]) return;
+      const d = futuras[0].d, obs = futuras[0].obs;
+      const elDate = document.getElementById('ritualDate');
+      if (elDate) {
+        let fmt = d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+        if (obs) fmt += ` — ${obs}`;
+        elDate.textContent = fmt;
+      }
+      const nd = d.getTime();
+      const elD = document.getElementById('d'), elH = document.getElementById('h'), elM = document.getElementById('m');
+      if (elD && elH && elM) {
+        function tick() {
+          const t = nd - Date.now();
+          if (t <= 0) return;
+          elD.textContent = Math.floor(t / 86400000);
+          elH.textContent = Math.floor((t % 86400000) / 3600000);
+          elM.textContent = Math.floor((t % 3600000) / 60000);
+          requestAnimationFrame(tick);
         }
-
-        // contador
-        const nd = d.getTime();
-        const elD = document.getElementById('d'), elH = document.getElementById('h'), elM = document.getElementById('m');
-        if (elD && elH && elM) {
-          function tick() {
-            const t = nd - Date.now();
-            if (t <= 0) return;
-            elD.textContent = Math.floor(t / 86400000);
-            elH.textContent = Math.floor((t % 86400000) / 3600000);
-            elM.textContent = Math.floor((t % 3600000) / 60000);
-            requestAnimationFrame(tick);
-          }
-          tick();
-        }
+        tick();
       }
     }
 
-    // ... (cupons, storage listener)
-  })();
+    // ===== CUPOM + MODAL =====
+    function showModal(msg) {
+      const m = document.getElementById('modal-cupom');
+      const t = document.getElementById('modal-text');
+      t.textContent = msg;
+      m.style.display = 'grid';
+      setTimeout(() => { m.style.display = 'none'; }, 2500);
+    }
+    window.ativarCupom = function () {
+      const inp = document.getElementById('cupom');
+      const val = (inp?.value || '').trim().toUpperCase();
+      if (!val) { showModal('Digite um cupom.'); return; }
+      const all = (window.__siteData?.cupons) || [];
+      const ok = all.find(c => (c.codigo || '').toUpperCase() === val && !!c.ativo);
+      if (ok) {
+        localStorage.setItem('tm_cupom_aplicado', val);
+        const descricao = ok.desconto || ok.desc || "";
+        const extra = descricao ? ` (${descricao})` : "";
+        showModal(`Cupom aplicado: ${ok.codigo}${extra}`);
+        const msg = `Olá! Quero usar o cupom ${ok.codigo}${extra} nas minhas consultas/rituais.`;
+        const url = `https://wa.me/5579998234443?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+      } else {
+        showModal('Cupom inválido ou inativo.');
+      }
+    };
 
-      /* — Cupons (integra com o botão “Ativar”) — */
-      /* — Cupons (integra com o botão “Ativar”) — */
-      window.ativarCupom = function () {
-        const inp = document.getElementById('cupom');
-        const val = (inp?.value || '').trim().toUpperCase();
-        if (!val) { alert('Digite um cupom.'); return; }
-
-        const ok = (data.cupons || []).find(c => (c.codigo || '').toUpperCase() === val);
-        if (ok) {
-          // guarda para referência futura (se quiser usar no form depois)
-          localStorage.setItem('tm_cupom_aplicado', val);
-
-          // abre o WhatsApp já com a mensagem do cupom
-          const desc = ok.desconto ? ` (${ok.desconto})` : '';
-          const msg = `Olá! Quero usar o cupom ${ok.codigo}${desc} nas minhas consultas/rituais.`;
-          const url = `https://wa.me/5579998234443?text=${encodeURIComponent(msg)}`;
-          window.open(url, '_blank');
-
-        } else {
-          alert('Cupom inválido ou expirado.');
+    // ===== Carregar do Firestore (com fallback localStorage) =====
+    async function carregarSite() {
+      // cache local (rápido)
+      try {
+        const raw = localStorage.getItem('tm_data');
+        if (raw) {
+          const cached = JSON.parse(raw);
+          window.__siteData = cached;
+          renderSobre(cached.about);
+          renderConsultas(cached.consultas);
+          renderFeiticos(cached.feiticos);
+          renderDepo(cached.depoimentos);
+          renderAgenda(cached.agenda);
         }
-      };
-
-
-      /* — Atualização “ao vivo” quando admin salvar em outra aba — */
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'tm_data' || e.key === 'tm_ping') {
-          location.reload();
+      } catch(e){}
+      // oficial
+      try {
+        const snap = await db.collection("siteData").doc("conteudo").get();
+        if (snap.exists) {
+          const data = snap.data() || {};
+          window.__siteData = data;
+          renderSobre(data.about);
+          renderConsultas(data.consultas);
+          renderFeiticos(data.feiticos);
+          renderDepo(data.depoimentos);
+          renderAgenda(data.agenda);
         }
-      });
+      } catch (e) {
+        console.warn("Não foi possível carregar do Firestore.", e);
+      }
+    }
+    carregarSite();
 
-    })();
+    // auto-recarregar se admin publicar em outra aba local
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tm_data' || e.key === 'tm_ping') location.reload();
+    });
+  </script>
 
-  </Script>
+  <!-- Modal/Toast de confirmação de cupom -->
+  <div id="modal-cupom" style="
+    display:none; position:fixed; inset:0; z-index:9999; 
+    place-items:center; background:rgba(0,0,0,.25);">
+    <div style="
+      max-width:90vw; padding:14px 18px; border-radius:14px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.15);
+      color:#f7e9a3; font-weight:700; text-align:center;">
+      <span id="modal-text">Mensagem</span>
+    </div>
+  </div>
 </body>
-
-
-
-
 </html>
