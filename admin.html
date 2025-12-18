@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin • Oráculos de The Magician</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
+
 <body>
   <div id="app" class="center">
     <!-- Login -->
@@ -18,10 +22,12 @@
           <div class="name">Oráculos de The Magician</div>
         </a>
       </div>
+
       <h1>Acesso restrito</h1>
-      <p class="muted">Entre com suas credenciais.</p>
+      <p class="muted">Entre com seu e-mail e senha do Firebase (Authentication).</p>
+
       <div class="grid">
-        <input id="user" placeholder="Usuário" autocomplete="username">
+        <input id="user" placeholder="Email do admin" autocomplete="username">
         <input id="pass" type="password" placeholder="Senha" autocomplete="current-password">
         <div class="row" style="align-items:center">
           <button class="btn" id="btnLogin">Entrar</button>
@@ -29,7 +35,10 @@
           <div class="right error" id="msg"></div>
         </div>
       </div>
-      <div class="muted" style="margin-top:8px; font-size:12px">Dica: troque o usuário/senha no código do admin.</div>
+
+      <div class="muted" style="margin-top:8px; font-size:12px">
+        Dica: o acesso agora é pelo Firebase Auth (não fica senha exposta no código).
+      </div>
     </div>
 
     <!-- Dashboard -->
@@ -140,11 +149,46 @@
     </div>
   </div>
 
-  <!-- ===== LÓGICA DO ADMIN ===== -->
+  <!-- ===== FIREBASE (compat) ===== -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
-    /* ====== CONFIG LOGIN ====== */
-    const USER = "admin";
-    const PASS = "magi@2025";
+    // ===== CONFIG FIREBASE =====
+  const firebaseConfig = {
+  apiKey: "AIzaSyDQA4AVdZu6TNi3eobf6qWaee0Hj-zujqg",
+  authDomain: "oraculos-magician.firebaseapp.com",
+  projectId: "oraculos-magician",
+  storageBucket: "oraculos-magician.firebasestorage.app",
+  messagingSenderId: "902773742288",
+  appId: "1:902773742288:web:456563b2b37bc3ba19dcd5",
+  measurementId: "G-7XG7N1Q7B9"
+};
+
+
+    try { firebase.initializeApp(firebaseConfig); } catch (e) { }
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // ===== UI helpers =====
+    const loginCard = document.getElementById('login-card');
+    const dash = document.getElementById('dash');
+    const msg = document.getElementById('msg');
+    const lockInfo = document.getElementById('lockInfo');
+
+    function showDash() {
+      document.getElementById('app').classList.remove('center');
+      loginCard.style.display = 'none';
+      dash.style.display = 'block';
+    }
+    function showLogin() {
+      document.getElementById('app').classList.add('center');
+      dash.style.display = 'none';
+      loginCard.style.display = 'block';
+    }
+
+    // ===== lock anti-bruteforce (local) =====
     const MAX_TRY = 5;
     const LOCK_MIN = 5;
 
@@ -156,62 +200,84 @@
       return true;
     }
     function tries(n) { if (n !== undefined) localStorage.setItem("adm_tries", String(n)); return parseInt(localStorage.getItem("adm_tries") || "0", 10); }
-    function setSession(on){ on ? localStorage.setItem("adm_session","1") : localStorage.removeItem("adm_session"); }
-    function hasSession(){ return localStorage.getItem("adm_session")==="1"; }
+    function updateLockUI() { lockInfo.style.display = isLocked() ? 'inline-flex' : 'none'; }
 
-    const loginCard = document.getElementById('login-card');
-    const dash = document.getElementById('dash');
-    const msg = document.getElementById('msg');
-    const lockInfo = document.getElementById('lockInfo');
-    function showDash(){ document.getElementById('app').classList.remove('center'); loginCard.style.display='none'; dash.style.display='block'; }
-    function showLogin(){ document.getElementById('app').classList.add('center'); dash.style.display='none'; loginCard.style.display='block'; }
-    function updateLockUI(){ lockInfo.style.display = isLocked() ? 'inline-flex' : 'none'; }
+    // ===== auth guard (manda abrir/fechar painel) =====
+    showLogin();
+    updateLockUI();
+    auth.onAuthStateChanged((user) => {
+      if (user) showDash();
+      else showLogin();
+    });
 
-    if (hasSession()) { showDash(); } else { showLogin(); updateLockUI(); }
-
+    // ===== login/logout =====
     document.getElementById('btnLogin').addEventListener('click', doLogin);
     document.getElementById('pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-    function doLogin(){
-      if (isLocked()) { msg.textContent = "Muitas tentativas. Tente novamente em alguns minutos."; updateLockUI(); return; }
-      const u = (document.getElementById('user').value || '').trim();
-      const p = document.getElementById('pass').value || '';
-      if (u === USER && p === PASS) { setSession(true); tries(0); msg.textContent=''; showDash(); return; }
-      const t = tries() + 1; tries(t);
-      if (t >= MAX_TRY) { setLock(); updateLockUI(); }
-      msg.textContent = "Usuário ou senha inválidos.";
+
+    async function doLogin() {
+      if (isLocked()) { updateLockUI(); msg.textContent = "Bloqueado. Aguarde alguns minutos."; return; }
+
+      try {
+        const email = (document.getElementById('user').value || '').trim();
+        const senha = document.getElementById('pass').value || '';
+        msg.textContent = '';
+
+        await auth.signInWithEmailAndPassword(email, senha);
+
+        tries(0);
+        msg.textContent = '';
+        // showDash() será chamado automaticamente pelo onAuthStateChanged
+      } catch (e) {
+        const t = tries() + 1; tries(t);
+        if (t >= MAX_TRY) { setLock(); updateLockUI(); }
+        msg.textContent = "Email ou senha inválidos.";
+        console.error("Login error:", e);
+      }
     }
-    document.getElementById('btnLogout').addEventListener('click', () => { setSession(false); showLogin(); });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      try { await auth.signOut(); } catch (e) { }
+      msg.textContent = '';
+      showLogin();
+    });
 
     // Tabs
     document.querySelectorAll('.tab').forEach(el => {
       el.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        el.classList.add('active'); document.getElementById(el.dataset.tab).classList.add('active');
+        el.classList.add('active');
+        document.getElementById(el.dataset.tab).classList.add('active');
       });
     });
 
     // ===== STATE no admin (cache local p/ rascunho) =====
     const KEY = "admin_content_v1";
-    const state = load() || { sobre:"", consultas:[], feiticos:[], depo:[], agenda:[], cupons:[] };
-    function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
-    function load(){ try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
+    const state = load() || { sobre: "", consultas: [], feiticos: [], depo: [], agenda: [], cupons: [] };
+
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function load() { try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
 
     // Sobre
-    const sobreTxt = document.getElementById('sobreTxt'); sobreTxt.value = state.sobre || "";
-    document.querySelector('[data-save="sobre"]').addEventListener('click', () => { state.sobre = sobreTxt.value; save(); alert('Salvo!'); });
+    const sobreTxt = document.getElementById('sobreTxt');
+    sobreTxt.value = state.sobre || "";
+    document.querySelector('[data-save="sobre"]').addEventListener('click', () => {
+      state.sobre = sobreTxt.value; save(); alert('Salvo!');
+    });
 
     // Consultas
     const elLC = document.getElementById('listaConsultas');
-    function renderConsultas(){
-      elLC.innerHTML = state.consultas.map((c,i)=>`
+    function renderConsultas() {
+      elLC.innerHTML = state.consultas.map((c, i) => `
         <div class="card">
           <strong>${c.titulo || '-'}</strong>
           <div class="muted">${c.desc || ''}</div>
           <div>${c.preco || ''}</div>
           <div style="margin-top:8px"><button class="btn" data-delc="${i}">Remover</button></div>
         </div>`).join('');
-      elLC.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => { state.consultas.splice(parseInt(b.dataset.delc,10),1); save(); renderConsultas(); });
+      elLC.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => {
+        state.consultas.splice(parseInt(b.dataset.delc, 10), 1); save(); renderConsultas();
+      });
     }
     renderConsultas();
     document.getElementById('addConsulta').addEventListener('click', () => {
@@ -219,22 +285,24 @@
       const d = document.getElementById('c_desc').value.trim();
       const p = document.getElementById('c_preco').value.trim();
       if (!t) return alert('Informe ao menos o título.');
-      state.consultas.push({ titulo:t, desc:d, preco:p });
+      state.consultas.push({ titulo: t, desc: d, preco: p });
       save(); renderConsultas();
-      ['c_titulo','c_desc','c_preco'].forEach(id => document.getElementById(id).value="");
+      ['c_titulo', 'c_desc', 'c_preco'].forEach(id => document.getElementById(id).value = "");
     });
 
     // Feitiços
     const elLF = document.getElementById('listaFeiticos');
-    function renderFeiticos(){
-      elLF.innerHTML = state.feiticos.map((f,i)=>`
+    function renderFeiticos() {
+      elLF.innerHTML = state.feiticos.map((f, i) => `
         <div class="card">
           <span class="muted">${f.badge || ''}</span>
           <strong style="display:block">${f.titulo || '-'}</strong>
           <div class="muted">${f.desc || ''}</div>
           <div style="margin-top:8px"><button class="btn" data-delf="${i}">Remover</button></div>
         </div>`).join('');
-      elLF.querySelectorAll('[data-delf]').forEach(b => b.onclick = () => { state.feiticos.splice(parseInt(b.dataset.delf,10),1); save(); renderFeiticos(); });
+      elLF.querySelectorAll('[data-delf]').forEach(b => b.onclick = () => {
+        state.feiticos.splice(parseInt(b.dataset.delf, 10), 1); save(); renderFeiticos();
+      });
     }
     renderFeiticos();
     document.getElementById('addFeitico').addEventListener('click', () => {
@@ -242,25 +310,27 @@
       const b = document.getElementById('f_badge').value.trim();
       const d = document.getElementById('f_desc').value.trim();
       if (!t) return alert('Informe ao menos o título.');
-      state.feiticos.push({ titulo:t, badge:b, desc:d });
+      state.feiticos.push({ titulo: t, badge: b, desc: d });
       save(); renderFeiticos();
-      ['f_titulo','f_badge','f_desc'].forEach(id => document.getElementById(id).value="");
+      ['f_titulo', 'f_badge', 'f_desc'].forEach(id => document.getElementById(id).value = "");
     });
 
     // Depoimentos (upload -> base64)
     const elLD = document.getElementById('listaDepo');
-    function renderDepo(){
-      elLD.innerHTML = state.depo.map((d,i)=>`
+    function renderDepo() {
+      elLD.innerHTML = state.depo.map((d, i) => `
         <div class="card">
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
             <img src="${d.url}" alt="${(d.alt || '')}" style="max-width:120px; max-height:120px; border-radius:8px; border:1px solid rgba(255,255,255,.15)">
             <div>
-              <div class="muted" style="word-break:break-all; max-width:420px">${(d.alt || '').replace(/</g,'&lt;')}</div>
+              <div class="muted" style="word-break:break-all; max-width:420px">${(d.alt || '').replace(/</g, '&lt;')}</div>
               <div style="margin-top:8px"><button class="btn" data-deld="${i}">Remover</button></div>
             </div>
           </div>
         </div>`).join('');
-      elLD.querySelectorAll('[data-deld]').forEach(b => b.onclick = () => { state.depo.splice(parseInt(b.dataset.deld,10),1); save(); renderDepo(); });
+      elLD.querySelectorAll('[data-deld]').forEach(b => b.onclick = () => {
+        state.depo.splice(parseInt(b.dataset.deld, 10), 1); save(); renderDepo();
+      });
     }
     renderDepo();
     document.getElementById('addDepo').addEventListener('click', () => {
@@ -268,21 +338,27 @@
       const alt = (document.getElementById('d_alt').value || '').trim();
       if (!file) return alert('Selecione uma imagem.');
       const reader = new FileReader();
-      reader.onload = () => { state.depo.push({ url: reader.result, alt }); save(); renderDepo(); document.getElementById('d_file').value=""; document.getElementById('d_alt').value=""; };
+      reader.onload = () => {
+        state.depo.push({ url: reader.result, alt }); save(); renderDepo();
+        document.getElementById('d_file').value = "";
+        document.getElementById('d_alt').value = "";
+      };
       reader.onerror = () => alert('Erro ao ler a imagem.');
       reader.readAsDataURL(file);
     });
 
     // Agenda
     const elLA = document.getElementById('listaAgenda');
-    function renderAgenda(){
-      elLA.innerHTML = state.agenda.map((a,i)=>`
+    function renderAgenda() {
+      elLA.innerHTML = state.agenda.map((a, i) => `
         <div class="card">
           <strong>${a.data || ''} ${a.hora || ''}</strong>
           <div class="muted">${a.obs || ''}</div>
           <div style="margin-top:8px"><button class="btn" data-dela="${i}">Remover</button></div>
         </div>`).join('');
-      elLA.querySelectorAll('[data-dela]').forEach(b => b.onclick = () => { state.agenda.splice(parseInt(b.dataset.dela,10),1); save(); renderAgenda(); });
+      elLA.querySelectorAll('[data-dela]').forEach(b => b.onclick = () => {
+        state.agenda.splice(parseInt(b.dataset.dela, 10), 1); save(); renderAgenda();
+      });
     }
     renderAgenda();
     document.getElementById('addAgenda').addEventListener('click', () => {
@@ -292,18 +368,20 @@
       if (!data) return alert('Informe a data.');
       state.agenda.push({ data, hora, obs });
       save(); renderAgenda();
-      ['a_data','a_hora','a_obs'].forEach(id => document.getElementById(id).value="");
+      ['a_data', 'a_hora', 'a_obs'].forEach(id => document.getElementById(id).value = "");
     });
 
     // Cupons
     const elLP = document.getElementById('listaCupons');
-    function renderCupons(){
-      elLP.innerHTML = state.cupons.map((c,i)=>`
+    function renderCupons() {
+      elLP.innerHTML = state.cupons.map((c, i) => `
         <div class="card">
           <strong>${c.codigo}</strong> — <span class="muted">${c.desc || ''}</span> — ativo: <b>${!!c.ativo}</b>
           <div style="margin-top:8px"><button class="btn" data-delp="${i}">Remover</button></div>
         </div>`).join('');
-      elLP.querySelectorAll('[data-delp]').forEach(b => b.onclick = () => { state.cupons.splice(parseInt(b.dataset.delp,10),1); save(); renderCupons(); });
+      elLP.querySelectorAll('[data-delp]').forEach(b => b.onclick = () => {
+        state.cupons.splice(parseInt(b.dataset.delp, 10), 1); save(); renderCupons();
+      });
     }
     renderCupons();
     document.getElementById('addCupom').addEventListener('click', () => {
@@ -315,44 +393,18 @@
       const obj = { codigo, desc, ativo };
       if (i >= 0) state.cupons[i] = obj; else state.cupons.push(obj);
       save(); renderCupons();
-      ['p_codigo','p_desc','p_ativo'].forEach(id => document.getElementById(id).value="");
+      ['p_codigo', 'p_desc', 'p_ativo'].forEach(id => document.getElementById(id).value = "");
     });
 
     // Export JSON
     document.getElementById('btnExport').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type:'application/json' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'conteudo-site.json'; a.click();
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'conteudo-site.json';
+      a.click();
       URL.revokeObjectURL(a.href);
     });
-
-    // Salvar local e pingar site quando clica no título
-    (function () {
-      const els = [ document.getElementById('brandHomeDash') ].filter(Boolean);
-      els.forEach((el) => {
-        el.addEventListener('click', function () {
-          try { salvarAdmin(); } catch (e) {}
-          localStorage.setItem('tm_ping', Date.now().toString());
-        });
-      });
-    })();
-  </script>
-
-  <!-- ===== FIREBASE (compat) ===== -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script>
-    // Config do projeto
-    const firebaseConfig = {
-      apiKey: "AIzaSyDQ4Av4udzvTK3neobf6qWae0Hj-zujqg",
-      authDomain: "oraculos-magician.firebaseapp.com",
-      projectId: "oraculos-magician",
-      storageBucket: "oraculos-magician.appspot.com",
-      messagingSenderId: "920773742288",
-      appId: "1:920773742288:web:456563b2b37bc3ba19dc5",
-      measurementId: "G-7XG7NQT879"
-    };
-    try { firebase.initializeApp(firebaseConfig); } catch(e){}
-    const db = firebase.firestore();
 
     // Monta pacote oficial p/ publicar (mapeia desc -> desconto)
     function montarPacote() {
@@ -377,16 +429,20 @@
     }
 
     async function salvarAdmin() {
+      // proteção extra (mesmo que a regra já bloqueie)
+      if (!auth.currentUser) {
+        alert("Você precisa estar logada para publicar.");
+        return;
+      }
+
       try {
         const data = montarPacote();
-        // salva também em localStorage (pré-visualização rápida)
-        localStorage.setItem('tm_data', JSON.stringify(data));
-        // publica no Firestore (todos veem)
-        await db.collection("siteData").doc("conteudo").set(data);
+        localStorage.setItem('tm_data', JSON.stringify(data)); // preview local
+        await db.collection("siteData").doc("conteudo").set(data); // oficial
         alert("Publicado com sucesso!");
       } catch (e) {
         console.error("Erro ao salvar:", e);
-        alert("Erro ao publicar no Firebase.");
+        alert("Erro ao publicar no Firebase (verifique Regras do Firestore).");
       }
     }
 
@@ -394,6 +450,21 @@
       await salvarAdmin();
       localStorage.setItem('tm_ping', Date.now().toString());
     });
+
+    // Salvar local e pingar site quando clica no título
+    (function () {
+      const els = [document.getElementById('brandHomeDash')].filter(Boolean);
+      els.forEach((el) => {
+        el.addEventListener('click', function () {
+          try { salvarAdmin(); } catch (e) { }
+          localStorage.setItem('tm_ping', Date.now().toString());
+        });
+      });
+    })();
+
   </script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
 </body>
+
 </html>

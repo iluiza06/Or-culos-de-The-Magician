@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Oráculos de The Magician</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@500;700;800&family=Great+Vibes&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -154,12 +157,12 @@
           <h3 style="margin:0 0 6px; color:var(--gold-300)">Redes & WhatsApp</h3>
           <div style="display:flex; gap:8px; flex-wrap:wrap">
             <a class="btn" style="background:linear-gradient(180deg,#aef7a6,#5df072)"
-              href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço.">💬 WhatsApp <span class="spark"></span></a>
+              href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço.">💬 WhatsApp
+              <span class="spark"></span></a>
             <a class="btn" href="https://www.instagram.com/le._bateleur?igsh=MnVjbG05cDM0Y29h" target="_blank">
               📸 Instagram <span class="spark"></span>
             </a>
           </div>
-          <p class="muted" style="margin-top:8px">Botão verde flutuante sempre visível no canto.</p>
         </div>
       </section>
 
@@ -173,7 +176,7 @@
 
   <!-- botão flutuante whatsapp -->
   <a title="WhatsApp" href="https://wa.me/5579998234443?text=Olá!%20Quero%20agendar%20uma%20consulta%20/%20feitiço."
-     style="position:fixed; left:16px; bottom:calc(var(--tabbar-h) + 18px); width:56px; height:56px; border-radius:50%; display:grid; place-items:center; z-index:65; text-decoration:none; background:linear-gradient(180deg,#aef7a6,#5df072); color:#0b1b0f; font-weight:900; box-shadow:0 10px 18px rgba(20,255,88,.2)">💬</a>
+    style="position:fixed; left:16px; bottom:calc(var(--tabbar-h) + 18px); width:56px; height:56px; border-radius:50%; display:grid; place-items:center; z-index:65; text-decoration:none; background:linear-gradient(180deg,#aef7a6,#5df072); color:#0b1b0f; font-weight:900; box-shadow:0 10px 18px rgba(20,255,88,.2)">💬</a>
 
   <!-- ===== SCRIPTS DO SITE (galáxia, atalhos, contato, carrosséis) ===== -->
   <script>
@@ -307,19 +310,21 @@
 
   <!-- ===== FIREBASE (compat) ===== -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script>
     // Config do seu projeto
     const firebaseConfig = {
-      apiKey: "AIzaSyDQ4Av4udzvTK3neobf6qWae0Hj-zujqg",
+      apiKey: "AIzaSyDQA4AVdZu6TNi3eobf6qWaee0Hj-zujqg",
       authDomain: "oraculos-magician.firebaseapp.com",
       projectId: "oraculos-magician",
-      storageBucket: "oraculos-magician.appspot.com",
-      messagingSenderId: "920773742288",
-      appId: "1:920773742288:web:456563b2b37bc3ba19dc5",
-      measurementId: "G-7XG7NQT879"
+      storageBucket: "oraculos-magician.firebasestorage.app",
+      messagingSenderId: "902773742288",
+      appId: "1:902773742288:web:456563b2b37bc3ba19dcd5",
+      measurementId: "G-7XG7N1Q7B9"
     };
-    try { firebase.initializeApp(firebaseConfig); } catch(e){}
+
+    try { firebase.initializeApp(firebaseConfig); } catch (e) { }
     const db = firebase.firestore();
 
     // guarda tudo o que o site carregou (cache + firestore)
@@ -333,7 +338,7 @@
     function renderConsultas(lista = []) {
       const rail = document.querySelector('#c1'); if (!rail) return;
       rail.innerHTML = "";
-      (lista||[]).forEach(item => {
+      (lista || []).forEach(item => {
         const card = el('article', { class: 'card card-slide' });
         if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
         if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
@@ -347,7 +352,7 @@
     function renderFeiticos(lista = []) {
       const rail = document.querySelector('#c2'); if (!rail) return;
       rail.innerHTML = "";
-      (lista||[]).forEach(item => {
+      (lista || []).forEach(item => {
         const card = el('article', { class: 'card card-slide' });
         if (item.badge) card.appendChild(el('span', { class: 'badge' }, item.badge));
         if (item.titulo) card.appendChild(el('h3', { style: 'margin:8px 0 4px' }, item.titulo));
@@ -359,7 +364,7 @@
     function renderDepo(lista = []) {
       const rail = document.querySelector('#c3'); if (!rail) return;
       rail.innerHTML = "";
-      (lista||[]).forEach(item => {
+      (lista || []).forEach(item => {
         if (!item.img) return;
         const fig = el('figure', { class: 'testi-card card' });
         const frame = el('div', { class: 'testi-frame' });
@@ -369,7 +374,7 @@
     }
     function renderAgenda(lista = []) {
       const now = new Date();
-      const futuras = (lista||[])
+      const futuras = (lista || [])
         .map(x => (typeof x === 'string' ? { date: x, obs: '' } : x))
         .map(x => ({ d: new Date(x.date), obs: x.obs || '' }))
         .filter(o => !isNaN(o.d) && o.d >= now)
@@ -438,19 +443,26 @@
           renderDepo(cached.depoimentos);
           renderAgenda(cached.agenda);
         }
-      } catch(e){}
+      } catch (e) { }
       // oficial
       try {
-        const snap = await db.collection("siteData").doc("conteudo").get();
-        if (snap.exists) {
+        db.collection("siteData").doc("conteudo").onSnapshot((snap) => {
+          if (!snap.exists) return;
           const data = snap.data() || {};
           window.__siteData = data;
+
+          // atualiza o cache local também (pra evitar “ver velho” depois)
+          localStorage.setItem('tm_data', JSON.stringify(data));
+
           renderSobre(data.about);
           renderConsultas(data.consultas);
           renderFeiticos(data.feiticos);
           renderDepo(data.depoimentos);
           renderAgenda(data.agenda);
-        }
+        }, (err) => {
+          console.warn("Não foi possível ouvir Firestore.", err);
+        });
+
       } catch (e) {
         console.warn("Não foi possível carregar do Firestore.", e);
       }
@@ -476,4 +488,5 @@
     </div>
   </div>
 </body>
+
 </html>
