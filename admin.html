@@ -264,57 +264,51 @@
 
     // ===== STATE no admin (cache local p/ rascunho) =====
     const KEY = "admin_content_v1";
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function load() { try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
+
     const state = load() || {
-      sobre: "", consultas: [], feiticos: [], depo: [], agenda: [], cupons: [],
+      sobre: "",
+      consultas: [],
+      feiticos: [],
+      depo: [],
+      agenda: [],
+      cupons: [],
       promo: { titulo: "", subtitulo: "" }
     };
     if (!state.promo) state.promo = { titulo: "", subtitulo: "" };
 
-    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
-    function load() { try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
-// ===== PROMO (título/subtítulo que aparece no site) =====
-const promoTituloEl = document.getElementById('promo_titulo');
-const promoSubtituloEl = document.getElementById('promo_subtitulo');
-const btnSavePromo = document.getElementById('savePromo');
+    // ===== PROMO (título/subtítulo que aparece no site) =====
+    const promoTituloEl = document.getElementById('promo_titulo');
+    const promoSubtituloEl = document.getElementById('promo_subtitulo');
+    const btnSavePromo = document.getElementById('savePromo');
 
-// preencher inputs ao abrir
-if (promoTituloEl) promoTituloEl.value = state.promo?.titulo || "";
-if (promoSubtituloEl) promoSubtituloEl.value = state.promo?.subtitulo || "";
+    if (promoTituloEl) promoTituloEl.value = state.promo?.titulo || "";
+    if (promoSubtituloEl) promoSubtituloEl.value = state.promo?.subtitulo || "";
 
-// salvar no state
-if (btnSavePromo) {
-  btnSavePromo.addEventListener('click', () => {
-    state.promo.titulo = (promoTituloEl?.value || '').trim();
-    state.promo.subtitulo = (promoSubtituloEl?.value || '').trim();
-    save();
-    alert("Título/Subtítulo da promo salvos! Agora clique em 'Publicar no site'.");
-  });
-}
-
-    // ===== Promo título/subtítulo =====
-    const promoTitulo = document.getElementById('promo_titulo');
-    const promoSubtitulo = document.getElementById('promo_subtitulo');
-    if (promoTitulo) promoTitulo.value = state.promo?.titulo || "";
-    if (promoSubtitulo) promoSubtitulo.value = state.promo?.subtitulo || "";
-
-    document.getElementById('savePromo')?.addEventListener('click', () => {
-      state.promo.titulo = (promoTitulo?.value || "").trim();
-      state.promo.subtitulo = (promoSubtitulo?.value || "").trim();
-      save();
-      alert("Título da promo salvo!");
-    });
+    if (btnSavePromo) {
+      btnSavePromo.addEventListener('click', () => {
+        state.promo.titulo = (promoTituloEl?.value || '').trim();
+        state.promo.subtitulo = (promoSubtituloEl?.value || '').trim();
+        save();
+        alert("Título/Subtítulo salvos! Agora clique em 'Publicar no site'.");
+      });
+    }
 
     // Sobre
     const sobreTxt = document.getElementById('sobreTxt');
-    sobreTxt.value = state.sobre || "";
-    document.querySelector('[data-save="sobre"]').addEventListener('click', () => {
-      state.sobre = sobreTxt.value; save(); alert('Salvo!');
+    if (sobreTxt) sobreTxt.value = state.sobre || "";
+    document.querySelector('[data-save="sobre"]')?.addEventListener('click', () => {
+      state.sobre = sobreTxt.value;
+      save();
+      alert('Salvo!');
     });
 
     // Consultas
     const elLC = document.getElementById('listaConsultas');
     function renderConsultas() {
-      elLC.innerHTML = state.consultas.map((c, i) => `
+      if (!elLC) return;
+      elLC.innerHTML = (state.consultas || []).map((c, i) => `
         <div class="card">
           <strong>${c.titulo || '-'}</strong>
           <div class="muted">${c.desc || ''}</div>
@@ -322,24 +316,29 @@ if (btnSavePromo) {
           <div style="margin-top:8px"><button class="btn" data-delc="${i}">Remover</button></div>
         </div>`).join('');
       elLC.querySelectorAll('[data-delc]').forEach(b => b.onclick = () => {
-        state.consultas.splice(parseInt(b.dataset.delc, 10), 1); save(); renderConsultas();
+        state.consultas.splice(parseInt(b.dataset.delc, 10), 1);
+        save();
+        renderConsultas();
       });
     }
     renderConsultas();
-    document.getElementById('addConsulta').addEventListener('click', () => {
-      const t = document.getElementById('c_titulo').value.trim();
-      const d = document.getElementById('c_desc').value.trim();
-      const p = document.getElementById('c_preco').value.trim();
+
+    document.getElementById('addConsulta')?.addEventListener('click', () => {
+      const t = (document.getElementById('c_titulo')?.value || '').trim();
+      const d = (document.getElementById('c_desc')?.value || '').trim();
+      const p = (document.getElementById('c_preco')?.value || '').trim();
       if (!t) return alert('Informe ao menos o título.');
       state.consultas.push({ titulo: t, desc: d, preco: p });
-      save(); renderConsultas();
-      ['c_titulo', 'c_desc', 'c_preco'].forEach(id => document.getElementById(id).value = "");
+      save();
+      renderConsultas();
+      ['c_titulo', 'c_desc', 'c_preco'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ""; });
     });
 
     // Feitiços
     const elLF = document.getElementById('listaFeiticos');
     function renderFeiticos() {
-      elLF.innerHTML = state.feiticos.map((f, i) => `
+      if (!elLF) return;
+      elLF.innerHTML = (state.feiticos || []).map((f, i) => `
         <div class="card">
           <span class="muted">${f.badge || ''}</span>
           <strong style="display:block">${f.titulo || '-'}</strong>
@@ -347,24 +346,29 @@ if (btnSavePromo) {
           <div style="margin-top:8px"><button class="btn" data-delf="${i}">Remover</button></div>
         </div>`).join('');
       elLF.querySelectorAll('[data-delf]').forEach(b => b.onclick = () => {
-        state.feiticos.splice(parseInt(b.dataset.delf, 10), 1); save(); renderFeiticos();
+        state.feiticos.splice(parseInt(b.dataset.delf, 10), 1);
+        save();
+        renderFeiticos();
       });
     }
     renderFeiticos();
-    document.getElementById('addFeitico').addEventListener('click', () => {
-      const t = document.getElementById('f_titulo').value.trim();
-      const b = document.getElementById('f_badge').value.trim();
-      const d = document.getElementById('f_desc').value.trim();
+
+    document.getElementById('addFeitico')?.addEventListener('click', () => {
+      const t = (document.getElementById('f_titulo')?.value || '').trim();
+      const b = (document.getElementById('f_badge')?.value || '').trim();
+      const d = (document.getElementById('f_desc')?.value || '').trim();
       if (!t) return alert('Informe ao menos o título.');
       state.feiticos.push({ titulo: t, badge: b, desc: d });
-      save(); renderFeiticos();
-      ['f_titulo', 'f_badge', 'f_desc'].forEach(id => document.getElementById(id).value = "");
+      save();
+      renderFeiticos();
+      ['f_titulo', 'f_badge', 'f_desc'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ""; });
     });
 
     // Depoimentos (upload -> base64)
     const elLD = document.getElementById('listaDepo');
     function renderDepo() {
-      elLD.innerHTML = state.depo.map((d, i) => `
+      if (!elLD) return;
+      elLD.innerHTML = (state.depo || []).map((d, i) => `
         <div class="card">
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
             <img src="${d.url}" alt="${(d.alt || '')}" style="max-width:120px; max-height:120px; border-radius:8px; border:1px solid rgba(255,255,255,.15)">
@@ -375,19 +379,24 @@ if (btnSavePromo) {
           </div>
         </div>`).join('');
       elLD.querySelectorAll('[data-deld]').forEach(b => b.onclick = () => {
-        state.depo.splice(parseInt(b.dataset.deld, 10), 1); save(); renderDepo();
+        state.depo.splice(parseInt(b.dataset.deld, 10), 1);
+        save();
+        renderDepo();
       });
     }
     renderDepo();
-    document.getElementById('addDepo').addEventListener('click', () => {
-      const file = document.getElementById('d_file').files?.[0];
-      const alt = (document.getElementById('d_alt').value || '').trim();
+
+    document.getElementById('addDepo')?.addEventListener('click', () => {
+      const file = document.getElementById('d_file')?.files?.[0];
+      const alt = (document.getElementById('d_alt')?.value || '').trim();
       if (!file) return alert('Selecione uma imagem.');
       const reader = new FileReader();
       reader.onload = () => {
-        state.depo.push({ url: reader.result, alt }); save(); renderDepo();
-        document.getElementById('d_file').value = "";
-        document.getElementById('d_alt').value = "";
+        state.depo.push({ url: reader.result, alt });
+        save();
+        renderDepo();
+        const df = document.getElementById('d_file'); if (df) df.value = "";
+        const da = document.getElementById('d_alt'); if (da) da.value = "";
       };
       reader.onerror = () => alert('Erro ao ler a imagem.');
       reader.readAsDataURL(file);
@@ -396,60 +405,69 @@ if (btnSavePromo) {
     // Agenda
     const elLA = document.getElementById('listaAgenda');
     function renderAgenda() {
-      elLA.innerHTML = state.agenda.map((a, i) => `
+      if (!elLA) return;
+      elLA.innerHTML = (state.agenda || []).map((a, i) => `
         <div class="card">
           <strong>${a.data || ''} ${a.hora || ''}</strong>
           <div class="muted">${a.obs || ''}</div>
           <div style="margin-top:8px"><button class="btn" data-dela="${i}">Remover</button></div>
         </div>`).join('');
       elLA.querySelectorAll('[data-dela]').forEach(b => b.onclick = () => {
-        state.agenda.splice(parseInt(b.dataset.dela, 10), 1); save(); renderAgenda();
+        state.agenda.splice(parseInt(b.dataset.dela, 10), 1);
+        save();
+        renderAgenda();
       });
     }
     renderAgenda();
-    document.getElementById('addAgenda').addEventListener('click', () => {
-      const data = document.getElementById('a_data').value;
-      const hora = document.getElementById('a_hora').value;
-      const obs = document.getElementById('a_obs').value.trim();
+
+    document.getElementById('addAgenda')?.addEventListener('click', () => {
+      const data = document.getElementById('a_data')?.value || "";
+      const hora = document.getElementById('a_hora')?.value || "";
+      const obs = (document.getElementById('a_obs')?.value || "").trim();
       if (!data) return alert('Informe a data.');
       state.agenda.push({ data, hora, obs });
-      save(); renderAgenda();
-      ['a_data', 'a_hora', 'a_obs'].forEach(id => document.getElementById(id).value = "");
+      save();
+      renderAgenda();
+      ['a_data', 'a_hora', 'a_obs'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ""; });
     });
 
     // Cupons
     const elLP = document.getElementById('listaCupons');
     function renderCupons() {
-      elLP.innerHTML = state.cupons.map((c, i) => `
+      if (!elLP) return;
+      elLP.innerHTML = (state.cupons || []).map((c, i) => `
         <div class="card">
           <strong>${c.codigo}</strong> — <span class="muted">${c.desc || ''}</span> — ativo: <b>${!!c.ativo}</b>
           <div style="margin-top:8px"><button class="btn" data-delp="${i}">Remover</button></div>
         </div>`).join('');
       elLP.querySelectorAll('[data-delp]').forEach(b => b.onclick = () => {
-        state.cupons.splice(parseInt(b.dataset.delp, 10), 1); save(); renderCupons();
+        state.cupons.splice(parseInt(b.dataset.delp, 10), 1);
+        save();
+        renderCupons();
       });
     }
     renderCupons();
 
-    document.getElementById('addCupom').addEventListener('click', () => {
-      const codigo = (document.getElementById('p_codigo').value || "").trim().toUpperCase(); // ✅ MAIÚSCULO
-      const desc = (document.getElementById('p_desc').value || "").trim();
-      const ativo = ((document.getElementById('p_ativo').value || "false").trim().toLowerCase() === 'true');
+    document.getElementById('addCupom')?.addEventListener('click', () => {
+      const codigo = (document.getElementById('p_codigo')?.value || "").trim().toUpperCase();
+      const desc = (document.getElementById('p_desc')?.value || "").trim();
+      const ativo = ((document.getElementById('p_ativo')?.value || "false").trim().toLowerCase() === 'true');
 
       if (!codigo) return alert('Informe o código.');
 
-      const i = state.cupons.findIndex(c => (c.codigo || "").toUpperCase() === codigo);
+      const i = (state.cupons || []).findIndex(c => (c.codigo || "").toUpperCase() === codigo);
       const obj = { codigo, desc, ativo };
 
       if (i >= 0) state.cupons[i] = obj;
       else state.cupons.push(obj);
 
-      save(); renderCupons();
-      ['p_codigo', 'p_desc', 'p_ativo'].forEach(id => document.getElementById(id).value = "");
+      save();
+      renderCupons();
+      ['p_codigo', 'p_desc', 'p_ativo'].forEach(id => { const e = document.getElementById(id); if (e) e.value = ""; });
     });
 
     // Export JSON
-    document.getElementById('btnExport').addEventListener('click', () => {
+    document.getElementById('btnExport')?.addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -462,13 +480,10 @@ if (btnSavePromo) {
     function montarPacote() {
       return {
         about: state.sobre || "",
-
-        // ✅ promo editável no site
         promo: {
           titulo: state.promo?.titulo || "",
           subtitulo: state.promo?.subtitulo || ""
         },
-
         consultas: (state.consultas || []).map(c => ({
           titulo: c.titulo || "", desc: c.desc || "", preco: c.preco || "", badge: c.badge || ""
         })),
@@ -481,8 +496,6 @@ if (btnSavePromo) {
           const d = iso ? new Date(iso) : null;
           return d && !isNaN(d) ? { date: d.toISOString(), obs: a.obs || "" } : null;
         }).filter(Boolean),
-
-        // ✅ cupons pro site
         cupons: (state.cupons || []).map(c => ({
           codigo: (c.codigo || "").toUpperCase(),
           desconto: c.desc || "",
@@ -508,22 +521,20 @@ if (btnSavePromo) {
       }
     }
 
-    document.getElementById('btnPublish').addEventListener('click', async () => {
+    document.getElementById('btnPublish')?.addEventListener('click', async () => {
       await salvarAdmin();
       localStorage.setItem('tm_ping', Date.now().toString());
     });
 
     // Salvar local e pingar site quando clica no título
     (function () {
-      const els = [document.getElementById('brandHomeDash')].filter(Boolean);
-      els.forEach((el) => {
-        el.addEventListener('click', function () {
-          try { salvarAdmin(); } catch (e) { }
-          localStorage.setItem('tm_ping', Date.now().toString());
-        });
+      const el = document.getElementById('brandHomeDash');
+      if (!el) return;
+      el.addEventListener('click', function () {
+        try { salvarAdmin(); } catch (e) { }
+        localStorage.setItem('tm_ping', Date.now().toString());
       });
     })();
-
   </script>
 
 </body>

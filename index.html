@@ -313,6 +313,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
     // Config do seu projeto
     const firebaseConfig = {
@@ -332,10 +333,30 @@
     window.__siteData = { cupons: [] };
 
     // ===== RENDER =====
+    function renderPromo(promo = {}) {
+      const t = document.getElementById('promoTitle');
+      const s = document.getElementById('promoSubtitle');
+      if (!t || !s) return;
+
+      const titulo = (promo?.titulo || "").trim();
+      const subtitulo = (promo?.subtitulo || "").trim();
+
+      t.textContent = titulo || "Promoção";
+
+      if (subtitulo) {
+        s.style.display = "block";
+        s.textContent = subtitulo;
+      } else {
+        s.style.display = "none";
+        s.textContent = "";
+      }
+    }
+
     function renderSobre(about) {
       const aboutP = document.querySelector('.about .about-text .muted');
       if (aboutP) aboutP.innerHTML = (about || "").replace(/\n/g, '<br>');
     }
+
     function renderConsultas(lista = []) {
       const rail = document.querySelector('#c1'); if (!rail) return;
       rail.innerHTML = "";
@@ -350,6 +371,7 @@
         rail.appendChild(card);
       });
     }
+
     function renderFeiticos(lista = []) {
       const rail = document.querySelector('#c2'); if (!rail) return;
       rail.innerHTML = "";
@@ -362,6 +384,7 @@
         rail.appendChild(card);
       });
     }
+
     function renderDepo(lista = []) {
       const rail = document.querySelector('#c3'); if (!rail) return;
       rail.innerHTML = "";
@@ -373,6 +396,7 @@
         frame.appendChild(img); fig.appendChild(frame); rail.appendChild(fig);
       });
     }
+
     function renderAgenda(lista = []) {
       const now = new Date();
       const futuras = (lista || [])
@@ -380,7 +404,9 @@
         .map(x => ({ d: new Date(x.date), obs: x.obs || '' }))
         .filter(o => !isNaN(o.d) && o.d >= now)
         .sort((a, b) => a.d - b.d);
+
       if (!futuras[0]) return;
+
       const d = futuras[0].d, obs = futuras[0].obs;
       const elDate = document.getElementById('ritualDate');
       if (elDate) {
@@ -388,6 +414,7 @@
         if (obs) fmt += ` — ${obs}`;
         elDate.textContent = fmt;
       }
+
       const nd = d.getTime();
       const elD = document.getElementById('d'), elH = document.getElementById('h'), elM = document.getElementById('m');
       if (elD && elH && elM) {
@@ -411,17 +438,21 @@
       m.style.display = 'grid';
       setTimeout(() => { m.style.display = 'none'; }, 2500);
     }
+
     window.ativarCupom = function () {
       const inp = document.getElementById('cupom');
       const val = (inp?.value || '').trim().toUpperCase();
       if (!val) { showModal('Digite um cupom.'); return; }
+
       const all = (window.__siteData?.cupons) || [];
       const ok = all.find(c => (c.codigo || '').toUpperCase() === val && !!c.ativo);
+
       if (ok) {
         localStorage.setItem('tm_cupom_aplicado', val);
         const descricao = ok.desconto || ok.desc || "";
         const extra = descricao ? ` (${descricao})` : "";
         showModal(`Cupom aplicado: ${ok.codigo}${extra}`);
+
         const msg = `Olá! Quero usar o cupom ${ok.codigo}${extra} nas minhas consultas/rituais.`;
         const url = `https://wa.me/5579998234443?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
@@ -438,15 +469,16 @@
         if (raw) {
           const cached = JSON.parse(raw);
           window.__siteData = cached;
+
           renderPromo(cached.promo);
           renderSobre(cached.about);
           renderConsultas(cached.consultas);
           renderFeiticos(cached.feiticos);
           renderDepo(cached.depoimentos);
           renderAgenda(cached.agenda);
-
         }
       } catch (e) { }
+
       // oficial
       try {
         db.collection("siteData").doc("conteudo").onSnapshot((snap) => {
@@ -454,15 +486,14 @@
           const data = snap.data() || {};
           window.__siteData = data;
 
-          // atualiza o cache local também (pra evitar “ver velho” depois)
           localStorage.setItem('tm_data', JSON.stringify(data));
 
+          renderPromo(data.promo);
           renderSobre(data.about);
           renderConsultas(data.consultas);
           renderFeiticos(data.feiticos);
           renderDepo(data.depoimentos);
           renderAgenda(data.agenda);
-          renderPromo(data.promo);
 
         }, (err) => {
           console.warn("Não foi possível ouvir Firestore.", err);
@@ -472,6 +503,7 @@
         console.warn("Não foi possível carregar do Firestore.", e);
       }
     }
+
     carregarSite();
 
     // auto-recarregar se admin publicar em outra aba local
