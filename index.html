@@ -105,8 +105,9 @@
       <section id="promocoes" class="section">
         <h2>Promoções & Cupons</h2>
         <div class="promo">
-          <h3 style="margin:4px 0 6px">🌹 Mês da Rosa Dourada</h3>
-          <p style="margin:0 0 10px">Tiragem 3 Perguntas com 15% OFF</p>
+          <h3 id="promoTitle" style="margin:4px 0 6px">Promoção</h3>
+          <p id="promoSubtitle" style="margin:0 0 10px"></p>
+
           <form onsubmit="event.preventDefault(); ativarCupom();">
             <div class="grid">
               <input id="cupom" placeholder="Digite seu cupom mágico (ex.: ROSADOURADA)" aria-label="Cupom" />
@@ -437,6 +438,7 @@
         if (raw) {
           const cached = JSON.parse(raw);
           window.__siteData = cached;
+          renderPromo(cached.promo);
           renderSobre(cached.about);
           renderConsultas(cached.consultas);
           renderFeiticos(cached.feiticos);
@@ -460,7 +462,7 @@
           renderFeiticos(data.feiticos);
           renderDepo(data.depoimentos);
           renderAgenda(data.agenda);
-          
+          renderPromo(data.promo);
 
         }, (err) => {
           console.warn("Não foi possível ouvir Firestore.", err);

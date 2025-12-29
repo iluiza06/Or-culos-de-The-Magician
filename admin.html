@@ -272,6 +272,24 @@
 
     function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
     function load() { try { return JSON.parse(localStorage.getItem(KEY) || ""); } catch { return null; } }
+// ===== PROMO (título/subtítulo que aparece no site) =====
+const promoTituloEl = document.getElementById('promo_titulo');
+const promoSubtituloEl = document.getElementById('promo_subtitulo');
+const btnSavePromo = document.getElementById('savePromo');
+
+// preencher inputs ao abrir
+if (promoTituloEl) promoTituloEl.value = state.promo?.titulo || "";
+if (promoSubtituloEl) promoSubtituloEl.value = state.promo?.subtitulo || "";
+
+// salvar no state
+if (btnSavePromo) {
+  btnSavePromo.addEventListener('click', () => {
+    state.promo.titulo = (promoTituloEl?.value || '').trim();
+    state.promo.subtitulo = (promoSubtituloEl?.value || '').trim();
+    save();
+    alert("Título/Subtítulo da promo salvos! Agora clique em 'Publicar no site'.");
+  });
+}
 
     // ===== Promo título/subtítulo =====
     const promoTitulo = document.getElementById('promo_titulo');
