@@ -442,6 +442,7 @@
           renderFeiticos(cached.feiticos);
           renderDepo(cached.depoimentos);
           renderAgenda(cached.agenda);
+
         }
       } catch (e) { }
       // oficial
@@ -459,6 +460,8 @@
           renderFeiticos(data.feiticos);
           renderDepo(data.depoimentos);
           renderAgenda(data.agenda);
+          
+
         }, (err) => {
           console.warn("Não foi possível ouvir Firestore.", err);
         });
